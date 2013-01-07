@@ -13,290 +13,177 @@
 		<meta name="viewport" content="width=device-width">
 		<link rel="stylesheet" href="css/bootstrap.min.css">
 		<link rel="stylesheet" href="css/bootstrap-responsive.min.css">
+		<link rel="stylesheet" href="css/docs.css">
+		<link rel="stylesheet" href="css/prettify.css">
 		<link rel="stylesheet" href="css/main.css">
 		<script src="js/vendor/modernizr-2.6.2-respond-1.1.0.min.js"></script>
 	</head>
-	<body>
+	<body data-spy="scroll" data-target=".bs-docs-sidebar">
 		<!--[if lt IE 7]>
 		<p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
 		<![endif]-->
 
-		<!-- This code is taken from http://twitter.github.com/bootstrap/examples/hero.html -->
-
+		<!-- Navbar
+		================================================== -->
 		<div class="navbar navbar-inverse navbar-fixed-top">
 			<div class="navbar-inner">
 				<div class="container">
-					<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </a>
-					<a class="brand" href="#">iPará Html5 Boilerplate</a>
+					<button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+					</button>
+					<a class="brand" href="./index.html">Bootstrap</a>
 					<div class="nav-collapse collapse">
 						<ul class="nav">
-							<li class="active">
+							<li class="">
 								<a href="#">Home</a>
 							</li>
-							<li>
-								<a href="#about">Ofertas</a>
-							</li>
-							<li>
-								<a href="#contact">Contatos</a>
+							<li class="active">
+								<a href="#">Componentes</a>
 							</li>
 						</ul>
-					</div><!--/.nav-collapse -->
+					</div>
 				</div>
 			</div>
 		</div>
+
+		<!-- Subhead
+		================================================== -->
+		<header class="jumbotron subhead" id="overview">
+			<div class="container">
+				<h1>iPará API de Componentes HTML5</h1>
+				<p class="lead">
+					Componentes do serviços do iPará Classificados baseados no HTML5 Boilerplate e Bootstrap.
+				</p>
+			</div>
+		</header>
 
 		<div class="container">
 
-			<!-- Main hero unit for a primary marketing message or call to action -->
-			<div class="hero-unit">
-				<h1>Destaques</h1>
-				<br/>
-				<div class="row-fluid">
-					<ul class="thumbnails">
-						<li class="span3">
-							<div class="thumbnail">
-								<img alt="300x200" src="http://www.ipara.com.br/ipara/Media/createThumbnail?path=http://www.ipara.com.br/users/3d1d753b-0083-44bf-a1ca-d7fa1c713d2b/fotos/6908c6cf-4c3c-451e-bc88-057a6f85f060.jpg&maxWidth=300&maxheight=300&extension=png" />
-								<div class="caption">
-									<h4>CASA - PRÓXIMO AO AEROPORTO</h4>
-									<p>
-										4 Quartos, 1 Suíte. 260,00 mt². R$ 450.000,00.
-									</p>
-									<p>
-										<a class="btn offset3" href="#">Ver detalhes &raquo;</a>
-									</p>
-								</div>
-							</div>
+			<!-- Docs nav
+			================================================== -->
+			<div class="row">
+				<div class="span3 bs-docs-sidebar">
+					<ul class="nav nav-list bs-docs-sidenav">
+						<li>
+							<a href="#global"><i class="icon-chevron-right"></i> Configurações Gerais</a>
 						</li>
-						<li class="span3">
-							<div class="thumbnail">
-								<img alt="300x200" src="http://www.ipara.com.br/ipara/Media/createThumbnail?path=http://www.ipara.com.br/users/3d1d753b-0083-44bf-a1ca-d7fa1c713d2b/fotos/6908c6cf-4c3c-451e-bc88-057a6f85f060.jpg&maxWidth=300&maxheight=300&extension=png" />
-								<div class="caption">
-									<h4>CASA - PRÓXIMO AO AEROPORTO</h4>
-									<p>
-										4 Quartos, 1 Suíte. 260,00 mt². R$ 450.000,00.
-									</p>
-									<p>
-										<a class="btn offset3" href="#">Ver detalhes &raquo;</a>
-									</p>
-								</div>
-							</div>
+						<li>
+							<a href="#destaques"><i class="icon-chevron-right"></i> Destaques</a>
 						</li>
-						<li class="span3">
-							<div class="thumbnail">
-								<img alt="300x200" src="http://www.ipara.com.br/ipara/Media/createThumbnail?path=http://www.ipara.com.br/users/3d1d753b-0083-44bf-a1ca-d7fa1c713d2b/fotos/6908c6cf-4c3c-451e-bc88-057a6f85f060.jpg&maxWidth=300&maxheight=300&extension=png" />
-								<div class="caption">
-									<h4>CASA - PRÓXIMO AO AEROPORTO</h4>
-									<p>
-										4 Quartos, 1 Suíte. 260,00 mt². R$ 450.000,00.
-									</p>
-									<p>
-										<a class="btn offset3" href="#">Ver detalhes &raquo;</a>
-									</p>
-								</div>
-							</div>
-						</li>
-						<li class="span3">
-							<div class="thumbnail">
-								<img alt="300x200" src="http://www.ipara.com.br/ipara/Media/createThumbnail?path=http://www.ipara.com.br/users/3d1d753b-0083-44bf-a1ca-d7fa1c713d2b/fotos/6908c6cf-4c3c-451e-bc88-057a6f85f060.jpg&maxWidth=300&maxheight=300&extension=png" />
-								<div class="caption">
-									<h4>CASA - PRÓXIMO AO AEROPORTO</h4>
-									<p>
-										4 Quartos, 1 Suíte. 260,00 mt². R$ 450.000,00.
-									</p>
-									<p>
-										<a class="btn offset3" href="#">Ver detalhes &raquo;</a>
-									</p>
-								</div>
-							</div>
-						</li>
-					</ul>
-					<ul class="thumbnails">
-						<li class="span3">
-							<div class="thumbnail">
-								<img alt="300x200" src="http://www.ipara.com.br/ipara/Media/createThumbnail?path=http://www.ipara.com.br/users/3d1d753b-0083-44bf-a1ca-d7fa1c713d2b/fotos/6908c6cf-4c3c-451e-bc88-057a6f85f060.jpg&maxWidth=300&maxheight=300&extension=png" />
-								<div class="caption">
-									<h4>CASA - PRÓXIMO AO AEROPORTO</h4>
-									<p>
-										4 Quartos, 1 Suíte. 260,00 mt². R$ 450.000,00.
-									</p>
-									<p>
-										<a class="btn offset3" href="#">Ver detalhes &raquo;</a>
-									</p>
-								</div>
-							</div>
-						</li>
-						<li class="span3">
-							<div class="thumbnail">
-								<img alt="300x200" src="http://www.ipara.com.br/ipara/Media/createThumbnail?path=http://www.ipara.com.br/users/3d1d753b-0083-44bf-a1ca-d7fa1c713d2b/fotos/6908c6cf-4c3c-451e-bc88-057a6f85f060.jpg&maxWidth=300&maxheight=300&extension=png" />
-								<div class="caption">
-									<h4>CASA - PRÓXIMO AO AEROPORTO</h4>
-									<p>
-										4 Quartos, 1 Suíte. 260,00 mt². R$ 450.000,00.
-									</p>
-									<p>
-										<a class="btn offset3" href="#">Ver detalhes &raquo;</a>
-									</p>
-								</div>
-							</div>
-						</li>
-						<li class="span3">
-							<div class="thumbnail">
-								<img alt="300x200" src="http://www.ipara.com.br/ipara/Media/createThumbnail?path=http://www.ipara.com.br/users/3d1d753b-0083-44bf-a1ca-d7fa1c713d2b/fotos/6908c6cf-4c3c-451e-bc88-057a6f85f060.jpg&maxWidth=300&maxheight=300&extension=png" />
-								<div class="caption">
-									<h4>CASA - PRÓXIMO AO AEROPORTO</h4>
-									<p>
-										4 Quartos, 1 Suíte. 260,00 mt². R$ 450.000,00.
-									</p>
-									<p>
-										<a class="btn offset3" href="#">Ver detalhes &raquo;</a>
-									</p>
-								</div>
-							</div>
-						</li>
-						<li class="span3">
-							<div class="thumbnail">
-								<img alt="300x200" src="http://www.ipara.com.br/ipara/Media/createThumbnail?path=http://www.ipara.com.br/users/3d1d753b-0083-44bf-a1ca-d7fa1c713d2b/fotos/6908c6cf-4c3c-451e-bc88-057a6f85f060.jpg&maxWidth=300&maxheight=300&extension=png" />
-								<div class="caption">
-									<h4>CASA - PRÓXIMO AO AEROPORTO</h4>
-									<p>
-										4 Quartos, 1 Suíte. 260,00 mt². R$ 450.000,00.
-									</p>
-									<p>
-										<a class="btn offset3" href="#">Ver detalhes &raquo;</a>
-									</p>
-								</div>
-							</div>
+						<li>
+							<a href="#listar"><i class="icon-chevron-right"></i> Listagem de Anúncios</a>
 						</li>
 					</ul>
 				</div>
+				<div class="span9">
 
-				<p>
-					<a class="btn btn-primary btn-large span2 offset8">ver mais ofertas &raquo;</a>
-				</p>
-			</div>
+					<!-- Configurações Gerais
+					================================================== -->
+					<section id="global">
+						<div class="page-header">
+							<h1>Configurações Gerais</h1>
+						</div>
 
-			<h2>Outras ofertas</h2>
-			<hr/>
-			<div class="row">
-				<div class="span4">
-					<h4>CASA - PRÓXIMO AO AEROPORTO</h4>
-					<img src="http://www.ipara.com.br/ipara/Media/createThumbnail?path=http://www.ipara.com.br/users/3d1d753b-0083-44bf-a1ca-d7fa1c713d2b/fotos/6908c6cf-4c3c-451e-bc88-057a6f85f060.jpg&maxWidth=135&maxheight=100&extension=png" class="img-polaroid img-left">
-					<p>
-						4 Quartos, 1 Suíte
-						<br/>
-						260,00 mt²
-						<br/>
-						R$ 450.000,00
-					</p>
-					<p>
-						<a class="btn" href="#">Ver detalhes &raquo;</a>
-					</p>
-				</div>
-				<div class="span4">
-					<h4>CASA - PRÓXIMO AO AEROPORTO</h4>
-					<img src="http://www.ipara.com.br/ipara/Media/createThumbnail?path=http://www.ipara.com.br/users/3d1d753b-0083-44bf-a1ca-d7fa1c713d2b/fotos/6908c6cf-4c3c-451e-bc88-057a6f85f060.jpg&maxWidth=135&maxheight=100&extension=png" class="img-polaroid img-left">
-					<p>
-						4 Quartos, 1 Suíte
-						<br/>
-						260,00 mt²
-						<br/>
-						R$ 450.000,00
-					</p>
-					<p>
-						<a class="btn" href="#">Ver detalhes &raquo;</a>
-					</p>
-				</div>
-				<div class="span4">
-					<h4>CASA - PRÓXIMO AO AEROPORTO</h4>
-					<img src="http://www.ipara.com.br/ipara/Media/createThumbnail?path=http://www.ipara.com.br/users/3d1d753b-0083-44bf-a1ca-d7fa1c713d2b/fotos/6908c6cf-4c3c-451e-bc88-057a6f85f060.jpg&maxWidth=135&maxheight=100&extension=png" class="img-polaroid img-left">
-					<p>
-						4 Quartos, 1 Suíte
-						<br/>
-						260,00 mt²
-						<br/>
-						R$ 450.000,00
-					</p>
-					<p>
-						<a class="btn" href="#">Ver detalhes &raquo;</a>
-					</p>
-				</div>
-			</div>
-			<div class="row">
-				<div class="span4">
-					<h4>CASA - PRÓXIMO AO AEROPORTO</h4>
-					<img src="http://www.ipara.com.br/ipara/Media/createThumbnail?path=http://www.ipara.com.br/users/3d1d753b-0083-44bf-a1ca-d7fa1c713d2b/fotos/6908c6cf-4c3c-451e-bc88-057a6f85f060.jpg&maxWidth=135&maxheight=100&extension=png" class="img-polaroid img-left">
-					<p>
-						4 Quartos, 1 Suíte
-						<br/>
-						260,00 mt²
-						<br/>
-						R$ 450.000,00
-					</p>
-					<p>
-						<a class="btn" href="#">Ver detalhes &raquo;</a>
-					</p>
-				</div>
-				<div class="span4">
-					<h4>CASA - PRÓXIMO AO AEROPORTO</h4>
-					<img src="http://www.ipara.com.br/ipara/Media/createThumbnail?path=http://www.ipara.com.br/users/3d1d753b-0083-44bf-a1ca-d7fa1c713d2b/fotos/6908c6cf-4c3c-451e-bc88-057a6f85f060.jpg&maxWidth=135&maxheight=100&extension=png" class="img-polaroid img-left">
-					<p>
-						4 Quartos, 1 Suíte
-						<br/>
-						260,00 mt²
-						<br/>
-						R$ 450.000,00
-					</p>
-					<p>
-						<a class="btn" href="#">Ver detalhes &raquo;</a>
-					</p>
-				</div>
-				<div class="span4">
-					<h4>CASA - PRÓXIMO AO AEROPORTO</h4>
-					<img src="http://www.ipara.com.br/ipara/Media/createThumbnail?path=http://www.ipara.com.br/users/3d1d753b-0083-44bf-a1ca-d7fa1c713d2b/fotos/6908c6cf-4c3c-451e-bc88-057a6f85f060.jpg&maxWidth=135&maxheight=100&extension=png" class="img-polaroid img-left">
-					<p>
-						4 Quartos, 1 Suíte
-						<br/>
-						260,00 mt²
-						<br/>
-						R$ 450.000,00
-					</p>
-					<p>
-						<a class="btn" href="#">Ver detalhes &raquo;</a>
-					</p>
+						<h3>Requer HTML5 doctype</h3>
+						<p>
+							Os componentes do iPará foram desenvolvidos baseados no HTML5 Boilterplate. São de fácil utilização e customização.
+							Alguns componentes são baseados no Bootstrap API. Para o uso dos mesmo é necessário a inclusão dos arquivos da API(estão inclusos com a API do iPará).
+						</p>
+
+						<h3>Arquivo config.js</h3>
+						<p>
+							Neste arquivos contém as opções de configuração do Site Conectado.
+						</p>
+						<pre class="prettyprint">var conf = {
+	usuario : "deborarealeimoveis",
+	qtdeDestaques : 7,
+	anunciosPorPagina : 20
+}; 
+						</pre>												
+						
+
+					</section>
+
+					<!-- Destaques
+					================================================== -->
+					<section id="destaques">
+						<div class="page-header">
+							<h1>Destaques</h1>
+						</div>
+						<h2>Carousel</h2>
+						<p>
+							A API do iPará irá carregar a quantidade de destaques definidos no <code>
+								config.js</code>
+							e renderizar como um Carousel
+						</p>
+						<p>
+							Basta inserir o seguite código html na página desejada
+						</p>
+						<pre class="">&lt;div class="iparaCarousel" class="carousel slide span8" &gt;&lt;/div&gt;</pre>
+						<div class="bs-docs-grid">
+							<div class="row show-grid">
+								<div id="iparaCarousel" class="carousel slide span8"></div>
+							</div><!-- /row -->
+						</div>
+					</section>
+
+					<!-- Listagem de Anúncios
+					================================================== -->
+					<section id="listar">
+						<div class="page-header">
+							<h1>Listar Anúncios</h1>
+						</div>
+						<p>
+							A API do iPará irá carregar os anúncios do usuário e faz uma paginação de acordo com o parametro <code>
+								anunciosPorPagina</code>
+							definido no arquivo <code>
+								config.js</code>
+						</p>
+						<p>
+							Basta inserir o seguite código html na página desejada
+						</p>
+						<pre class="">&lt;div class="iparaListar" class="span8" &gt;&lt;/div&gt;</pre>
+						<div class="bs-docs-grid">
+							<div class="row">
+								<div id="iparaListar" class="span8">
+								</div>
+							</div><!-- /row -->
+						</div>
+					</section>
+
 				</div>
 			</div>
-			<br/>
-			<p>
-				<a class="btn btn-primary btn-large offset9">ver mais ofertas &raquo;</a>
-			</p>
-			<hr/>
-
-			<footer>
-				<p>
-					&copy; iPará Html5 Boilerplate 2013
-				</p>
-			</footer>
 
 		</div>
-		<!-- /container -->
 
+		<!-- Footer
+		================================================== -->
+		<footer class="footer">
+			<div class="container">
+
+			</div>
+		</footer>
+		<script src="js/vendor/widgets.js"></script>
 		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
 		<script>
 			window.jQuery || document.write('<script src="js/vendor/jquery-1.8.3.min.js"><\/script>')
 		</script>
-
+		<script src="js/vendor/jquery.tmpl.min.js"></script>
+		<script src="js/vendor/jquery.paging.min.js"></script>
 		<script src="js/vendor/bootstrap.min.js"></script>
-
+		<script src="js/vendor/prettify.js"></script>
 		<script src="js/config.js"></script>
-		<script src="js/main.js?usuario=deborarealeimoveis"></script>
-
+		<script src="js/api.js"></script>
+		<script src="js/main.js"></script>
 		<script>
-			var _gaq = [['_setAccount', 'UA-XXXXX-X'], ['_trackPageview']];
-			( function(d, t) {
-					var g = d.createElement(t), s = d.getElementsByTagName(t)[0];
-					g.src = ('https:' == location.protocol ? '//ssl' : '//www') + '.google-analytics.com/ga.js';
-					s.parentNode.insertBefore(g, s)
-				}(document, 'script'));
+var _gaq = [['_setAccount', 'UA-XXXXX-X'], ['_trackPageview']];
+( function(d, t) {
+var g = d.createElement(t), s = d.getElementsByTagName(t)[0];
+g.src = ('https:' == location.protocol ? '//ssl' : '//www') + '.google-analytics.com/ga.js';
+s.parentNode.insertBefore(g, s)
+}(document, 'script'));
 		</script>
 	</body>
 </html>

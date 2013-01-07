@@ -1,29 +1,6 @@
-// namespace e única variavel global
-var ipara = {};
-ipara.Usuario = {};
-ipara.Anuncio = {};
-ipara.Usuario.username = "deborarealeimoveis";
-ipara.Anuncio.qtdeDestaques = 6;
-
-// Avoid `console` errors in browsers that lack a console.
-(function() {
-    var method;
-    var noop = function noop() {};
-    var methods = [
-        'assert', 'clear', 'count', 'debug', 'dir', 'dirxml', 'error',
-        'exception', 'group', 'groupCollapsed', 'groupEnd', 'info', 'log',
-        'markTimeline', 'profile', 'profileEnd', 'table', 'time', 'timeEnd',
-        'timeStamp', 'trace', 'warn'
-    ];
-    var length = methods.length;
-    var console = (window.console = window.console || {});
-
-    while (length--) {
-        method = methods[length];
-
-        // Only stub undefined methods.
-        if (!console[method]) {
-            console[method] = noop;
-        }
-    }
-}());
+//configurações do site
+var conf = {
+	usuario : "deborarealeimoveis",
+	qtdeDestaques : 7,
+	anunciosPorPagina : 5
+};

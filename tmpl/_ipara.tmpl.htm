@@ -1,0 +1,24 @@
+<!-- Destaque template -->
+<script id="destaquesCarouselItemTmpl" type="x-jquery-tmpl">
+	<div class="item">
+		<img src="http://www.ipara.com.br/ipara/Media/createThumbnail?path=http://www.ipara.com.br/users/${UserId}/fotos/${foto}&maxWidth=800&maxheight=600&extension=png" alt="">
+		<div class="carousel-caption">
+			<h4>${titulo}</h4>
+			<p>${descricao}</p>
+		</div>
+	</div>
+</script>
+<script id="listarItemTmpl" type="x-jquery-tmpl">
+	<div class="span8 media">
+		<h4 class="media-heading">${titulo}</h4>
+		<a class="pull-left" href="#"> <img src="http://www.ipara.com.br/ipara/Media/createThumbnail?path=http://www.ipara.com.br/users/${UserId}/fotos/${foto}&maxWidth=135&maxheight=100&extension=png" class="img-polaroid media-object" /> </a>
+		<div class="media-body">
+			<p>
+				${descricao}
+			</p>
+			<p>
+				<a class="btn offset4" href="detalhes.html?id=${id_anuncio}">Ver detalhes &raquo;</a>
+			</p>
+		</div>
+	</div>
+</script>
