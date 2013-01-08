@@ -4,8 +4,13 @@
    Autor: Pedro Oscar Nascimento
    ========================================================================== */
 
-#banners {
-	padding: 10px
+#filtroListar .btn-group button{
+	width: 161px;
+}
+
+#filtroListar .btn-group{
+	margin:0px;
+	margin-bottom: 3px;
 }
 
 

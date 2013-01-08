@@ -36,6 +36,21 @@
     $.get('tmpl/_ipara.tmpl.htm', function(templates) {
 		$('body').append(templates);
 	}); 
+	
+	
+		//Inicializa as variáveis de filtro no sessionStorage
+		//A chamada do serviço de filtro é a seguinte
+		//GET, OPTIONS /imoveis/faixa/pagesize/{Page}/{PageSize}/{id_subcategoria}/{id_marca}/{id_finalidade}/
+		//... {id_localidade}/{id_bairro}/{dormitorios}/{vagas}/{faixa}/{UserId}
+		sessionStorage["subcategoria"] = 0;
+		sessionStorage["marca"] = 0;
+		sessionStorage["finalidade"] = 0;
+		sessionStorage["localidade"] = 0;
+		sessionStorage["bairro"] = 0;
+		sessionStorage["dormitorios"] = "_";
+		sessionStorage["vagas"] = "_";
+		sessionStorage["faixa"] = -1; 
+
 }());
 
 // definindo o namespace ipara (para separação de escopo)
@@ -55,7 +70,7 @@ var ipara = {};
 	//Pega o total de anúncios do usuário
 	ipara.getTotalAnuncios = function(userid) {
 		return $.ajax({
-			url : "http://www.ipara.com.br/iparaServices/imoveis/"+userid+"?format=json",
+			url : "http://www.ipara.com.br/iparaServices/imoveis/contafaixa/"+sessionStorage['subcategoria']+"/0/"+sessionStorage['finalidade']+"/"+sessionStorage['localidade']+"/"+sessionStorage['bairro']+"/_/_/"+sessionStorage['faixa']+"/"+userid+"/0?format=json",
 			crossDomain : true,
 			async : false,
 			dataType : 'jsonp'
@@ -90,34 +105,32 @@ var ipara = {};
 	};
 	
 	//Carrega lista de anúncios de acordo com a página
-	ipara.carregaListar = function(pagina) {
-		
-		//Adiciona a area de paginação
-		$("#iparaListar").append('<div class="pagination"></div>');
-		
+	ipara.carregaListar = function() {
 		var userid = ipara.getUserId();
 		userid.success(function(data) {
 			var totalAnuncios = ipara.getTotalAnuncios(data.UserId);
 			totalAnuncios.success(function(total){
+				//Informar o usuário quantas ofertas encontradas
+				$("#iparaListar h3").html(total + " ofertas encontradas");
 				
-				$(".pagination").paging(total, {// pagina pelo total de veiculos
+				//Paginação de anúncios
+				$(".paginator").paging(total, {// pagina pelo total de veiculos
 					format : '[< ncnnn! >]', // define navegação
 					perpage : conf.anunciosPorPagina, // elementos por página
 					lapping : 0,
-					page : pagina, // página inicial
+					fill:"...",
+					page : 1, // página inicial
 					onSelect : function(page) {
 						var pagina = (this.slice[0] / conf.anunciosPorPagina) + 1;
 						$.ajax({
-							url : "http://www.ipara.com.br/iparaServices/imoveis/page/pagesize/"+pagina+"/"+conf.anunciosPorPagina+"/"+data.UserId+"/?format=json",
+							url : "http://www.ipara.com.br/iparaServices/imoveis/faixa/pagesize/"+pagina+"/"+conf.anunciosPorPagina+"/"+sessionStorage['subcategoria']+"/0/"+sessionStorage['finalidade']+"/"+sessionStorage['localidade']+"/"+sessionStorage['bairro']+"/_/_/"+sessionStorage['faixa']+"/"+data.UserId+"?format=json",
 							crossDomain : true,
 							async : false,
 							dataType : 'jsonp',
-							success : function(anuncios) {
-								var inner = '<div class="row"></div>';
-								$('#iparaListar').append(inner);
-								
+							beforeSend:function(){
 								//Limpar lista atual de itens
-								$("#iparaListar .row").html('');
+								$("#iparaListar .row").html("");},
+							success : function(anuncios) {
 								//Carregando itens do listar de acordo com o template
 								for (var i = 0, j = anuncios.length; i < j; i++) {
 									var html = anuncios[i].descricao;
@@ -138,6 +151,121 @@ var ipara = {};
 		});
 	};
 
+	//Carrega filtros
+	ipara.carregaFiltros = function(){
+		
+		var userid = ipara.getUserId();
+		userid.success(function(data) {
+			
+			//Adiciona comportamento ao selecionar uma opção de fitro
+			$("ul.dropdown-menu li a").live("click",function(){
+				$(this).parent().parent().parent().find("button span.drop-label").html($(this).html());
+				sessionStorage[$(this).data("group").toString()] = $(this).data("id");
+				if($(this).data("group") === "localidade"){
+					var id = $(this).data("id");
+					//Filtro de bairro
+					$.ajax({
+						url : "http://www.ipara.com.br/iparaservices/imoveisfiltro/0/0/0/"+id+"/0/_/_/bairro/"+data.UserId+"?format=json",
+						crossDomain : true,
+						async : false,
+						dataType : 'jsonp',
+						beforeSend:function(){
+							//Limpa o dropdown
+							$("#filtroListar .btn-toolbar #dropBairro ul").html("");
+						},
+						success : function(filtros) {
+							for (var i = 0, j = filtros.length; i < j; i++) {
+								filtros[i].id = filtros[i].id_bairro;
+								filtros[i].label = filtros[i].bairro;
+								$('#dropdownItemTmpl').tmpl(filtros[i]).appendTo("#filtroListar .btn-toolbar #dropBairro ul");
+							}
+						}
+					});
+				}
+			});
+				
+			//Filtro de subcategoria
+			$.ajax({
+				url : "http://www.ipara.com.br/iparaservices/imoveisfiltro/0/0/0/0/0/_/_/subcategoria/"+data.UserId+"?format=json",
+				crossDomain : true,
+				async : false,
+				dataType : 'jsonp',
+				beforeSend:function(){
+					//Carrega o html base do dropdown
+					$("#dropdownBaseTmpl").tmpl({label:"Tipo", id:"dropSubcategoria"}).appendTo("#filtroListar .btn-toolbar");
+				},
+				success : function(filtros) {
+					for (var i = 0, j = filtros.length; i < j; i++) {
+						filtros[i].id = filtros[i].id_subcategoria;
+						filtros[i].label = filtros[i].subcategoria;
+						$('#dropdownItemTmpl').tmpl(filtros[i]).appendTo("#filtroListar .btn-toolbar #dropSubcategoria ul");
+					}
+				}
+			});
+			
+			//Filtro de finalidade
+			$.ajax({
+				url : "http://www.ipara.com.br/iparaservices/imoveisfiltro/0/0/0/0/0/_/_/finalidade/"+data.UserId+"?format=json",
+				crossDomain : true,
+				async : false,
+				dataType : 'jsonp',
+				beforeSend:function(){
+					//Carrega o html base do dropdown
+					$("#dropdownBaseTmpl").tmpl({label:"Finalidade", id:"dropFinalidade"}).appendTo("#filtroListar .btn-toolbar");
+				},
+				success : function(filtros) {
+					for (var i = 0, j = filtros.length; i < j; i++) {
+						filtros[i].id = filtros[i].id_finalidade;
+						filtros[i].label = filtros[i].finalidade;
+						$('#dropdownItemTmpl').tmpl(filtros[i]).appendTo("#filtroListar .btn-toolbar #dropFinalidade ul");
+					}
+				}
+			});
+			
+			//Filtro de faixa de preço
+			var faixas = [
+					{id:"faixa1",group:"preco",label:"menos de 50 mil"},
+					{id:"faixa1",group:"preco",label:"50 a 100 mil"},
+					{id:"faixa1",group:"preco",label:"100 a 250 mil"},
+					{id:"faixa1",group:"preco",label:"250 a 400 mil"},
+					{id:"faixa1",group:"preco",label:"400 a 800 mil"},
+					{id:"faixa1",group:"preco",label:"acima de 800 mil"}
+				];
+			$("#filtroListar .btn-toolbar").append($("#dropdownBaseTmpl").tmpl({label:"Faixa de Preço", id:"dropPreco"}));
+			for (var i = 0, j = faixas.length; i < j; i++) {
+				$("#filtroListar .btn-toolbar #dropPreco ul").append($('#dropdownItemTmpl').tmpl(faixas[i]));
+			}
+			
+			//Filtro de Localidade
+			$.ajax({
+				url : "http://www.ipara.com.br/iparaservices/imoveisfiltro/0/0/0/0/0/_/_/localidade/"+data.UserId+"?format=json",
+				crossDomain : true,
+				async : false,
+				dataType : 'jsonp',
+				beforeSend:function(){
+					//Carrega o html base do dropdown
+					$("#dropdownBaseTmpl").tmpl({label:"Cidade", id:"dropLocalidade"}).appendTo("#filtroListar .btn-toolbar");
+				},
+				success : function(filtros) {
+					for (var i = 0, j = filtros.length; i < j; i++) {
+						filtros[i].id = filtros[i].id_localidade;
+						filtros[i].label = filtros[i].localidade;
+						$('#dropdownItemTmpl').tmpl(filtros[i]).appendTo("#filtroListar .btn-toolbar #dropLocalidade ul");
+					}
+				}
+			});
+			
+			//Base do filtro de bairro
+			$("#dropdownBaseTmpl").tmpl({label:"Bairro", id:"dropBairro"}).appendTo("#filtroListar .btn-toolbar");
+			
+			//Botão de filtrar
+			$('<div class="btn-group"><button id="btnFiltrar" type="button" class="btn btn-primary btn-large">Filtrar</button></div>').appendTo("#filtroListar .btn-toolbar");
+			$("#btnFiltrar").live("click",function(){
+				ipara.carregaListar();
+			});
+		});
+	};
+	
 })();
 
 
@@ -151,29 +279,29 @@ var ipara = {};
 			case 'block':
 				// n and c
 				if (this.value == this.page)
-					return '<li><a class="link" href="#">' + this.value + '</a></li>';
+					return '<li class="active"><a href="#listar">' + this.value + '</a></li>';
 				if (!this.active)
 					return '';
-				return '<li><a class="link" href="#">' + this.value + '</a></li>';
+				return '<li class="disable"><a href="#listar">' + this.value + '</a></li>';
 			case 'next':
 				// >
 				if (this.active)
-					return '<li><a class="link" href="#">Próximo</a></li>';
-				return '<li><a class="link" href="#">Próximo</a></li>';
+					return '<li class="disable"><a href="#listar">Próximo</a></li>';
+				return '<li class="active"><a href="#listar">Próximo</a></li>';
 			case 'prev':
 				// <
 				if (this.active)
-					return '<li><a class="link" href="#">Anterior</a></li>';
-				return '<li><a class="link" href="#">Anterior</a></li>';
+					return '<li class="disable"><a href="#listar">Anterior</a></li>';
+				return '<li class="active"><a href="#listar">Anterior</a></li>';
 			case 'first':
 				// [
 				if (this.active)
-					return '<li><a class="link" href="#">Primeiro</a></li>';
-				return '<li><a class="link" href="#">Primeiro</a></li>';
+					return '<li class="disable"><a href="#listar">Primeiro</a></li>';
+				return '<li class="active"><a href="#listar">Primeiro</a></li>';
 			case 'last':
 				// ]
 				if (this.active)
-					return '<li><a class="link" href="#">Último</a></li>';
-				return '<li><a class="link" href="#">Último</a></li>';
+					return '<li class="disable"><a href="#listar">Último</a></li>';
+				return '<li class="active"><a href="#listar">Último</a></li>';
 		}
 	}
