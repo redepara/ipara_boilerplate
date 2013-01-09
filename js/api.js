@@ -37,20 +37,21 @@
 		$('body').append(templates);
 	}); 
 	
-	
 		//Inicializa as variáveis de filtro no sessionStorage
 		//A chamada do serviço de filtro é a seguinte
 		//GET, OPTIONS /imoveis/faixa/pagesize/{Page}/{PageSize}/{id_subcategoria}/{id_marca}/{id_finalidade}/
 		//... {id_localidade}/{id_bairro}/{dormitorios}/{vagas}/{faixa}/{UserId}
-		sessionStorage["subcategoria"] = 0;
-		sessionStorage["marca"] = 0;
-		sessionStorage["finalidade"] = 0;
-		sessionStorage["localidade"] = 0;
-		sessionStorage["bairro"] = 0;
-		sessionStorage["dormitorios"] = "_";
-		sessionStorage["vagas"] = "_";
-		sessionStorage["faixa"] = -1; 
-
+		if (typeof sessionStorage["manterFiltro"] === "undefined" || sessionStorage["manterFiltro"] === "false"){
+			sessionStorage["subcategoria"] = 0;
+			sessionStorage["marca"] = 0;
+			sessionStorage["finalidade"] = 0;
+			sessionStorage["localidade"] = 0;
+			sessionStorage["dormitorios"] = "_";
+			sessionStorage["vagas"] = "_";
+			sessionStorage["faixa"] = -1;
+			sessionStorage["bairro"] = 0;
+		}
+			
 }());
 
 // definindo o namespace ipara (para separação de escopo)
@@ -106,12 +107,16 @@ var ipara = {};
 	
 	//Carrega lista de anúncios de acordo com a página
 	ipara.carregaListar = function() {
+		//Limpa div da listagem caso tenha algo e carrega tmpl base
+		var html ='<h3></h3><hr/><div class="pagination"><ul class="paginator"></ul></div><div class="row"></div><div class="pagination"><ul class="paginator"></ul></div>';
+		$(".iparaListar").html('').append(html);
+		
 		var userid = ipara.getUserId();
 		userid.success(function(data) {
 			var totalAnuncios = ipara.getTotalAnuncios(data.UserId);
 			totalAnuncios.success(function(total){
 				//Informar o usuário quantas ofertas encontradas
-				$("#iparaListar h3").html(total + " ofertas encontradas");
+				$(".iparaListar h3").html(total + " ofertas encontradas");
 				
 				//Paginação de anúncios
 				$(".paginator").paging(total, {// pagina pelo total de veiculos
@@ -129,7 +134,7 @@ var ipara = {};
 							dataType : 'jsonp',
 							beforeSend:function(){
 								//Limpar lista atual de itens
-								$("#iparaListar .row").html("");},
+								$(".iparaListar .row").html("");},
 							success : function(anuncios) {
 								//Carregando itens do listar de acordo com o template
 								for (var i = 0, j = anuncios.length; i < j; i++) {
@@ -138,9 +143,10 @@ var ipara = {};
 									div.innerHTML = html;
 									var texto = div.textContent || div.innerText || "";
 									anuncios[i].descricao = texto;
-									$('#listarItemTmpl').tmpl(anuncios[i]).appendTo("#iparaListar .row");
+									$('#listarItemTmpl').tmpl(anuncios[i]).appendTo(".iparaListar .row");
 								}
-							}
+							},
+							complete: function() {sessionStorage["manterFiltro"] = false;}
 						});
 					},
 					onFormat : formatPagination
@@ -149,16 +155,22 @@ var ipara = {};
 				
 			});
 		});
+		
+		
 	};
 
 	//Carrega filtros
 	ipara.carregaFiltros = function(){
+		//Limpa div de filtro caso tenha algo e carrega tmpl base
+		var html = '<div class="btn-toolbar"></div>';
+		$(".filtroListar").append(html);
 		
 		var userid = ipara.getUserId();
 		userid.success(function(data) {
 			
 			//Adiciona comportamento ao selecionar uma opção de fitro
 			$("ul.dropdown-menu li a").live("click",function(){
+				sessionStorage["manterFiltro"] = true;
 				$(this).parent().parent().parent().find("button span.drop-label").html($(this).html());
 				sessionStorage[$(this).data("group").toString()] = $(this).data("id");
 				if($(this).data("group") === "localidade"){
@@ -171,13 +183,13 @@ var ipara = {};
 						dataType : 'jsonp',
 						beforeSend:function(){
 							//Limpa o dropdown
-							$("#filtroListar .btn-toolbar #dropBairro ul").html("");
+							$(".filtroListar .btn-toolbar #dropBairro ul").html("");
 						},
 						success : function(filtros) {
 							for (var i = 0, j = filtros.length; i < j; i++) {
 								filtros[i].id = filtros[i].id_bairro;
 								filtros[i].label = filtros[i].bairro;
-								$('#dropdownItemTmpl').tmpl(filtros[i]).appendTo("#filtroListar .btn-toolbar #dropBairro ul");
+								$('#dropdownItemTmpl').tmpl(filtros[i]).appendTo(".filtroListar .btn-toolbar #dropBairro ul");
 							}
 						}
 					});
@@ -192,13 +204,13 @@ var ipara = {};
 				dataType : 'jsonp',
 				beforeSend:function(){
 					//Carrega o html base do dropdown
-					$("#dropdownBaseTmpl").tmpl({label:"Tipo", id:"dropSubcategoria"}).appendTo("#filtroListar .btn-toolbar");
+					$("#dropdownBaseTmpl").tmpl({label:"Tipo", id:"dropSubcategoria"}).appendTo(".filtroListar .btn-toolbar");
 				},
 				success : function(filtros) {
 					for (var i = 0, j = filtros.length; i < j; i++) {
 						filtros[i].id = filtros[i].id_subcategoria;
 						filtros[i].label = filtros[i].subcategoria;
-						$('#dropdownItemTmpl').tmpl(filtros[i]).appendTo("#filtroListar .btn-toolbar #dropSubcategoria ul");
+						$('#dropdownItemTmpl').tmpl(filtros[i]).appendTo(".filtroListar .btn-toolbar #dropSubcategoria ul");
 					}
 				}
 			});
@@ -211,13 +223,13 @@ var ipara = {};
 				dataType : 'jsonp',
 				beforeSend:function(){
 					//Carrega o html base do dropdown
-					$("#dropdownBaseTmpl").tmpl({label:"Finalidade", id:"dropFinalidade"}).appendTo("#filtroListar .btn-toolbar");
+					$("#dropdownBaseTmpl").tmpl({label:"Finalidade", id:"dropFinalidade"}).appendTo(".filtroListar .btn-toolbar");
 				},
 				success : function(filtros) {
 					for (var i = 0, j = filtros.length; i < j; i++) {
 						filtros[i].id = filtros[i].id_finalidade;
 						filtros[i].label = filtros[i].finalidade;
-						$('#dropdownItemTmpl').tmpl(filtros[i]).appendTo("#filtroListar .btn-toolbar #dropFinalidade ul");
+						$('#dropdownItemTmpl').tmpl(filtros[i]).appendTo(".filtroListar .btn-toolbar #dropFinalidade ul");
 					}
 				}
 			});
@@ -231,9 +243,9 @@ var ipara = {};
 					{id:"faixa1",group:"preco",label:"400 a 800 mil"},
 					{id:"faixa1",group:"preco",label:"acima de 800 mil"}
 				];
-			$("#filtroListar .btn-toolbar").append($("#dropdownBaseTmpl").tmpl({label:"Faixa de Preço", id:"dropPreco"}));
+			$(".filtroListar .btn-toolbar").append($("#dropdownBaseTmpl").tmpl({label:"Faixa de Preço", id:"dropPreco"}));
 			for (var i = 0, j = faixas.length; i < j; i++) {
-				$("#filtroListar .btn-toolbar #dropPreco ul").append($('#dropdownItemTmpl').tmpl(faixas[i]));
+				$(".filtroListar .btn-toolbar #dropPreco ul").append($('#dropdownItemTmpl').tmpl(faixas[i]));
 			}
 			
 			//Filtro de Localidade
@@ -244,27 +256,45 @@ var ipara = {};
 				dataType : 'jsonp',
 				beforeSend:function(){
 					//Carrega o html base do dropdown
-					$("#dropdownBaseTmpl").tmpl({label:"Cidade", id:"dropLocalidade"}).appendTo("#filtroListar .btn-toolbar");
+					$("#dropdownBaseTmpl").tmpl({label:"Cidade", id:"dropLocalidade"}).appendTo(".filtroListar .btn-toolbar");
 				},
 				success : function(filtros) {
 					for (var i = 0, j = filtros.length; i < j; i++) {
 						filtros[i].id = filtros[i].id_localidade;
 						filtros[i].label = filtros[i].localidade;
-						$('#dropdownItemTmpl').tmpl(filtros[i]).appendTo("#filtroListar .btn-toolbar #dropLocalidade ul");
+						$('#dropdownItemTmpl').tmpl(filtros[i]).appendTo(".filtroListar .btn-toolbar #dropLocalidade ul");
 					}
 				}
 			});
 			
 			//Base do filtro de bairro
-			$("#dropdownBaseTmpl").tmpl({label:"Bairro", id:"dropBairro"}).appendTo("#filtroListar .btn-toolbar");
+			$("#dropdownBaseTmpl").tmpl({label:"Bairro", id:"dropBairro"}).appendTo(".filtroListar .btn-toolbar");
 			
 			//Botão de filtrar
-			$('<div class="btn-group"><button id="btnFiltrar" type="button" class="btn btn-primary btn-large">Filtrar</button></div>').appendTo("#filtroListar .btn-toolbar");
-			$("#btnFiltrar").live("click",function(){
+			$('<div class="btn-group"><button type="button" class="btn btn-primary btn-large btnFiltrar">Filtrar</button></div>').appendTo(".filtroListar .btn-toolbar");
+			$(".btnFiltrar").live("click",function(){
+				if($(this).parent().parent().parent().hasClass("post")){
+					location.href = "listar.html";
+				}
 				ipara.carregaListar();
 			});
 		});
 	};
+	
+	
+		//Detalhes de um anúncio
+		ipara.carregaDetalhes = function() {
+			$.ajax({
+				url : "http://www.ipara.com.br/iparaServices/imovelanuncio/2197?format=json",
+				crossDomain : true,
+				async : false,
+				dataType : 'jsonp',
+				success : function(anuncio) {
+					
+				}
+			});
+		}; 
+
 	
 })();
 

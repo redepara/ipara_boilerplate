@@ -75,6 +75,9 @@
 						<li>
 							<a href="#listar"><i class="icon-chevron-right"></i> Listagem de Anúncios</a>
 						</li>
+						<li>
+							<a href="#detalhes"><i class="icon-chevron-right"></i> Detalhes de Anúncio</a>
+						</li>
 					</ul>
 				</div>
 				<div class="span9">
@@ -125,7 +128,7 @@
 						<p>
 							Basta inserir o seguite código html na página desejada
 						</p>
-						<pre class="">&lt;div class="iparaCarousel" class="carousel slide span8" &gt;&lt;/div&gt;</pre>
+						<pre class="">&lt;div class="iparaCarousel" class="carousel slide"&gt;&lt;/div&gt;</pre>
 						<div class="bs-docs-grid">
 							<div class="row show-grid">
 								<div id="iparaCarousel" class="carousel slide span8"></div>
@@ -141,37 +144,48 @@
 						</div>
 						<p>
 							A API do iPará irá carregar os anúncios do usuário e faz uma paginação de acordo com o parametro
-							<code>
-								anunciosPorPagina
-							</code>
-							definido no arquivo
+							<code>anunciosPorPagina</code> definido no arquivo
 							<code>
 								config.js
 							</code>
 						</p>
+						<h4>Para inserir listagem com filtro</h4>
 						<p>
-							Basta inserir o seguite código html na página desejada
+							Basta inserir o seguite código html na página desejada:
 						</p>
-						<pre class="">&lt;div class="iparaListar" class="span8" &gt;&lt;/div&gt;</pre>
+						<pre>
+&lt;div title="filtro" class="filtroListar"&gt;&lt;/div&gt;
+&lt;div title="listar" class="iparaListar"&gt;&lt;/div&gt;</pre>
 						<div class="bs-docs-grid">
 							<div class="row">
-								<div title="filtro" id="filtroListar" class="span2">
-									<h3>Filtrar</h3>
-									<div class="btn-toolbar">
-										
-									</div>
+								<div title="filtro" class="filtroListar span2">
 								</div>
-								<div title="listar" id="iparaListar" class="span6">
-									<h3>Ofertas encontradas</h3><hr/>
-									<div class="pagination">
-										<ul class="paginator"></ul>
-									</div>
-									<div class="row"></div>
-									<div class="pagination">
-										<ul class="paginator"></ul>
-									</div>
+								<div title="listar" class="iparaListar span6">
 								</div>
 							</div><!-- /row -->
+						</div>
+						
+						<h4>Para inserir apenas o filtro e a listagem acontecer em outra página</h4>
+						<p>Utilize o seguinte html:</p>
+						<pre>&lt;div title="filtro" class="filtroListar post"&gt;&lt;/div&gt;</pre>
+						<p>Ao utilizar a classe <code>post</code> o botão filtrar irá redirecionar para a página <code>listar.html</code></p>
+						<div class="bs-docs-grid">
+							<div title="filtro" class="span8 filtroListar post"></div>
+						</div>
+					</section>
+					
+					<br class="clearfix"/>
+					<br class="clearfix"/>
+					<!-- Detalhes
+					================================================== -->
+					<section id="detalhes">
+						<div class="page-header">
+							<h1>Detalhes de Anúncio</h1>
+							<p>Para detalhar um anúncio utilize a página <code>detalhes.html</code> esta sempre vem com o parametro o anúncio a ser detalhado<br/>
+								Desta forma: <code>detalhes.html?id=1234</code>
+							 </p>
+							 <p>A página deve conter o seguinte código html:</p>
+							 <pre>&lt;div class="iparaDetalhes"&gt;&lt;/div&gt;</pre>
 						</div>
 					</section>
 

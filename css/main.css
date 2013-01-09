@@ -4,11 +4,11 @@
    Autor: Pedro Oscar Nascimento
    ========================================================================== */
 
-#filtroListar .btn-group button{
+.filtroListar .btn-group button{
 	width: 161px;
 }
 
-#filtroListar .btn-group{
+.filtroListar .btn-group{
 	margin:0px;
 	margin-bottom: 3px;
 }
