@@ -11,5 +11,13 @@ if ($(".iparaListar").length > 0) {
 
 //Carregar os componentes de detalhes
 if ($(".iparaDetalhes").length > 0) {
-	ipara.carregaDetalhes();
+	var idAnuncio = getQueryString()["id"];
+	ipara.carregaDetalhes(idAnuncio);
+	
 }
+
+//Chamadas de funções que deverão ser executadas apenas quando tudo for carregado
+$(window).load(function() {
+	//Carrega galeria prettyphoto se houver galeria na pagina
+	$("a[rel^='prettyPhoto']").prettyPhoto();
+});
