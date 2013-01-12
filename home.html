@@ -17,6 +17,12 @@
 		<link rel="stylesheet" href="css/prettify.css">
 		<link rel="stylesheet" href="css/main.css">
 		<script src="js/vendor/modernizr-2.6.2-respond-1.1.0.min.js"></script>
+		<style>
+			.filtroListar .btn-group{
+				margin: 7px;
+			}
+			.content-carousel .container .carousel .carousel-inner .item { padding:0 5% }
+		</style>
 	</head>
 	<body data-spy="scroll" data-target=".bs-docs-sidebar">
 		<!--[if lt IE 7]>
@@ -54,22 +60,35 @@
 			<div class="container">
 				<h1>iPará API de Componentes HTML5</h1>
 				<p class="lead">
-					Listagem de Anúncios
+					Página Inicial
 				</p>
 			</div>
 		</header>
 
 		<div class="container">
 			<div class="row">
-				<div class="span2">
-					<div style="background: none; box-shadow: none; margin: 0;" title="filtro" class="bs-docs-sidenav filtroListar"></div>
+				<h4>BUSCAR IMÓVEIS</h4>
+				<div class="span12">
+					<div title="filtro" class="filtroListar post"></div>
 				</div>
-				<div class="span8">
-					<div>
-						<div class="row">
-							<div title="listar" class="iparaListar"></div>
-						</div>
+			</div>
+			<hr/>
+			<div class="row">
+				<h4>DESTAQUES</h4>
+				<div class="span12">
+					<div id="iparaCarousel" class="carousel slide span7"></div>
+					<div class="span4">
+						<div class="banner"></div>
+						<div class="banner"></div>
+						<div class="banner"></div>
+						<div class="banner"></div>
 					</div>
+				</div>
+			</div>
+			<hr/>
+			<div class="row">
+				<h4>OUTRAS OFERTAS</h4>
+				<div class="span12">
 				</div>
 			</div>
 		</div>

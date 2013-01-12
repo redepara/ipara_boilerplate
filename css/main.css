@@ -28,6 +28,12 @@ max-width: none;
 	cursor: pointer;
 }
 
+.banner {
+	height: 118px;
+	background: #dceaf4;
+	margin-bottom: 10px;
+}
+
 
 
 
