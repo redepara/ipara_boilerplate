@@ -20,4 +20,7 @@ if ($(".iparaDetalhes").length > 0) {
 $(window).load(function() {
 	//Carrega galeria prettyphoto se houver galeria na pagina
 	$("a[rel^='prettyPhoto']").prettyPhoto();
+	
+	//Carrega widgets do twitter se houver
+	twttr.widgets.load();
 });

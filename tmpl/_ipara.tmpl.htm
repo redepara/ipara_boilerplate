@@ -1,52 +1,52 @@
 <!-- Destaques template -->
 <script id="destaquesCarouselItemTmpl" type="x-jquery-tmpl">
 	<div class="item">
-		<a href="detalhes.html?id=${id_anuncio}">
-			<img src="http://www.ipara.com.br/ipara/Media/createThumbnail?path=http://www.ipara.com.br/users/${UserId}/fotos/${foto}&maxWidth=800&maxheight=800&extension=png" alt="">
-			<div class="carousel-caption">
-				<h4>${titulo}</h4>
-				<p>
-					${descricao}
-				</p>
-			</div>
-		</a>
+	<a href="detalhes.html?id=${id_anuncio}">
+	<img src="http://www.ipara.com.br/ipara/Media/createThumbnail?path=http://www.ipara.com.br/users/${UserId}/fotos/${foto}&maxWidth=800&maxheight=800&extension=png" alt="">
+	<div class="carousel-caption">
+	<h4>${titulo}</h4>
+	<p>
+	${descricao}
+	</p>
+	</div>
+	</a>
 	</div>
 </script>
 <!-- Item da lista de anúncios -->
 <script id="listarItemTmpl" type="x-jquery-tmpl">
 	<div class="span8 media">
-		<h4 class="media-heading">${titulo}</h4>
-		<a class="pull-left" href="#"> <img src="http://www.ipara.com.br/ipara/Media/createThumbnail?path=http://www.ipara.com.br/users/${UserId}/fotos/${foto}&maxWidth=135&maxheight=135&extension=png" class="img-polaroid media-object" /> </a>
-		<div class="media-body">
-			<p>
-				${descricao}
-			</p>
-			<p>
-				<a class="btn offset4" href="detalhes.html?id=${id_anuncio}">Ver detalhes &raquo;</a>
-			</p>
-		</div>
+	<h4 class="media-heading">${titulo}</h4>
+	<a class="pull-left" href="#"> <img src="http://www.ipara.com.br/ipara/Media/createThumbnail?path=http://www.ipara.com.br/users/${UserId}/fotos/${foto}&maxWidth=135&maxheight=135&extension=png" class="img-polaroid media-object" /> </a>
+	<div class="media-body">
+	<p>
+	${descricao}
+	</p>
+	<p>
+	<a class="btn offset4" href="detalhes.html?id=${id_anuncio}">Ver detalhes &raquo;</a>
+	</p>
+	</div>
 	</div>
 </script>
 <!-- Dropdown base -->
 <script id="dropdownBaseTmpl" type="x-jquery-tmpl">
 	<div class="btn-group" id="${id}">
-		<button class="btn btn-large dropdown-toggle" data-toggle="dropdown">
-			<span class="drop-label">${label}</span> <span class="caret"></span>
-		</button>
-		<ul class="dropdown-menu"></ul>
+	<button class="btn btn-large dropdown-toggle" data-toggle="dropdown">
+	<span class="drop-label">${label}</span> <span class="caret"></span>
+	</button>
+	<ul class="dropdown-menu"></ul>
 	</div>
 </script>
 <!-- Dropdown itens -->
 <script id="dropdownItemTmpl" type="x-jquery-tmpl">
-		<li>
-			<a data-group="${group}" data-id="${id}" href="#filtro">${label}</a>
-		</li>
+	<li>
+	<a data-group="${group}" data-id="${id}" href="#filtro">${label}</a>
+	</li>
 	</ul>
 </script>
 <!-- Slider de Fotos do Anúncio-->
 <script id="sliderFotosTmpl" type="x-jquery-tmpl">
 	<div class="item">
-		<img src="http://www.ipara.com.br/ipara/Media/createThumbnail?path=http://www.ipara.com.br/users/${UserId}/fotos/${midia}&maxWidth=${maxWidth}&maxheight=${maxHeight}&extension=png" alt="">
+	<img src="http://www.ipara.com.br/ipara/Media/createThumbnail?path=http://www.ipara.com.br/users/${UserId}/fotos/${midia}&maxWidth=${maxWidth}&maxheight=${maxHeight}&extension=png" alt="">
 	</div>
 </script>
 <!-- Galeria de Fotos do Anúncio -->
@@ -64,6 +64,10 @@
 	<hr/>
 	<img src="img/glyphicons_envelope.png"/>&nbsp;<span><a href="mailto:${email}">${email}</a></span>
 	<hr/>
+	<h4>Compartilhar</h4>
+	<a href="https://twitter.com/share" class="twitter-share-button" data-via="ipara_" data-lang="pt">Tweetar</a>
+	<div class="fb-like" data-send="false" data-width="450" data-show-faces="true"></div>
+	<g:plusone></g:plusone>
 </script>
 <!-- Informações de Anúncio -->
 <script id="infoAnuncioTmpl" type="x-jquery-tmpl">
@@ -72,4 +76,40 @@
 	<h3>${titulo}</h3>
 	<p>{{html descricao}}</p>
 	<div id="mapa"><span></span></div>
+</script>
+<!-- Carrega API do Twitter -->
+<script>
+	! function(d, s, id) {
+		var js, fjs = d.getElementsByTagName(s)[0];
+		if (!d.getElementById(id)) {
+			js = d.createElement(s);
+			js.id = id;
+			js.src = "//platform.twitter.com/widgets.js";
+			fjs.parentNode.insertBefore(js, fjs);
+		}
+	}(document, "script", "twitter-wjs"); 
+</script>
+<!-- Carrega API do Facebook -->
+<div id="fb-root"></div>
+<script>
+	( function(d, s, id) {
+			var js, fjs = d.getElementsByTagName(s)[0];
+			if (d.getElementById(id))
+				return;
+			js = d.createElement(s);
+			js.id = id;
+			js.src = "//connect.facebook.net/pt_BR/all.js#xfbml=1&appId=248204328585913";
+			fjs.parentNode.insertBefore(js, fjs);
+		}(document, 'script', 'facebook-jssdk')); 
+</script>
+<!-- Carrega API do GooglePlus -->
+<script type="text/javascript" src="https://apis.google.com/js/plusone.js"></script>
+<!-- Carrega Google Analytics -->
+<script>
+	var _gaq = [['_setAccount', 'UA-XXXXX-X'], ['_trackPageview']];
+	( function(d, t) {
+			var g = d.createElement(t), s = d.getElementsByTagName(t)[0];
+			g.src = ('https:' == location.protocol ? '//ssl' : '//www') + '.google-analytics.com/ga.js';
+			s.parentNode.insertBefore(g, s)
+		}(document, 'script')); 
 </script>

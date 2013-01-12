@@ -53,7 +53,6 @@
 			sessionStorage["faixa"] = -1;
 			sessionStorage["bairro"] = 0;
 		}
-		
 	
 	}());
 
