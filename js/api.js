@@ -106,6 +106,33 @@ var ipara = {};
 			});
 		});
 	};
+	
+	//Pega outros anúncios (com destaque menor)
+	ipara.carregaRecentes = function() {
+		var userid = ipara.getUserId();
+		userid.success(function(data) {
+			$.ajax({
+				url : "http://www.ipara.com.br/iparaServices/imoveis/page/pagesize/1/" + conf.qtdeOfertasRecentes + "/" + data.UserId + "?format=json",
+				crossDomain : true,
+				async : false,
+				dataType : 'jsonp',
+				success : function(recentes) {
+					//Carregando itens de ofertas recentes
+					for (var i = 0, j = recentes.length; i < j; i++) {
+						if(i === conf.qtdeOfertasRecentes/2){
+							$(".recentes").parent().append('<ul class="thumbnails recentes"></ul>');
+							$('#recentesItemTmpl').tmpl(recentes[i]).appendTo(".recentes:last");
+						}
+						else if(i+1 > conf.qtdeOfertasRecentes/2){
+							$('#recentesItemTmpl').tmpl(recentes[i]).appendTo(".recentes:last");
+						}
+						else
+							$('#recentesItemTmpl').tmpl(recentes[i]).appendTo(".recentes");
+					}
+				}
+			});
+		});
+	};
 
 	//Carrega lista de anúncios de acordo com a página
 	ipara.carregaListar = function() {

@@ -1,16 +1,28 @@
 <!-- Destaques template -->
 <script id="destaquesCarouselItemTmpl" type="x-jquery-tmpl">
 	<div class="item">
-	<a href="detalhes.html?id=${id_anuncio}">
-	<img src="http://www.ipara.com.br/ipara/Media/createThumbnail?path=http://www.ipara.com.br/users/${UserId}/fotos/${foto}&maxWidth=800&maxheight=800&extension=png" alt="">
-	<div class="carousel-caption">
-	<h4>${titulo}</h4>
-	<p>
-	${descricao}
-	</p>
+		<a href="detalhes.html?id=${id_anuncio}">
+			<img src="http://www.ipara.com.br/ipara/Media/createThumbnail?path=http://www.ipara.com.br/users/${UserId}/fotos/${foto}&maxWidth=800&maxheight=800&extension=png" alt="" />
+			<div class="carousel-caption">
+				<h4>${titulo}</h4>
+				<p>${descricao}</p>
+			</div>
+		</a>
 	</div>
-	</a>
-	</div>
+</script>
+<!-- Ofertas recentes -->
+<script id="recentesItemTmpl" type="x-jquery-tmpl">
+	<li class="span2">
+		<div class="thumbnail">
+			<img src="http://www.ipara.com.br/ipara/Media/createThumbnail?path=http://www.ipara.com.br/users/${UserId}/fotos/${foto}&maxWidth=160&maxheight=120&extension=png" />
+			<div class="caption">
+				<h6>${titulo}</h6>
+				<p>
+					<a href="detalhes.html?id=${id_anuncio}" class="btn btn-primary">Detalhes</a>
+				</p>
+			</div>
+		</div>
+	</li>
 </script>
 <!-- Item da lista de anúncios -->
 <script id="listarItemTmpl" type="x-jquery-tmpl">
@@ -113,3 +125,5 @@
 			s.parentNode.insertBefore(g, s)
 		}(document, 'script')); 
 </script>
+<!-- Carrega Script do Chat -->
+<script src="http://www.ipara.com.br/veiculo/scripts/chat.js" type="text/javascript"></script>
