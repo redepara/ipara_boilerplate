@@ -33,3 +33,12 @@ max-width: none;
 	background: #dceaf4;
 	margin-bottom: 10px;
 }
+
+.thumbnail {
+	text-align: center;
+	height: 270px;
+}
+
+.thumbnail h6 {
+	height: 60px
+}

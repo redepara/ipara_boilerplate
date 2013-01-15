@@ -119,15 +119,13 @@ var ipara = {};
 				success : function(recentes) {
 					//Carregando itens de ofertas recentes
 					for (var i = 0, j = recentes.length; i < j; i++) {
-						if(i === conf.qtdeOfertasRecentes/2){
+						if(((conf.qtdeOfertasRecentes - i) % 6) === 0){
 							$(".recentes").parent().append('<ul class="thumbnails recentes"></ul>');
 							$('#recentesItemTmpl').tmpl(recentes[i]).appendTo(".recentes:last");
 						}
-						else if(i+1 > conf.qtdeOfertasRecentes/2){
+						else {
 							$('#recentesItemTmpl').tmpl(recentes[i]).appendTo(".recentes:last");
 						}
-						else
-							$('#recentesItemTmpl').tmpl(recentes[i]).appendTo(".recentes");
 					}
 				}
 			});
