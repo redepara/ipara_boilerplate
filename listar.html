@@ -11,12 +11,12 @@
 		<title>iPará Html5 Boilerplate</title>
 		<meta name="description" content="Site base para criação de Sites Conectados.">
 		<meta name="viewport" content="width=device-width">
-		<link rel="stylesheet" href="css/bootstrap.min.css">
-		<link rel="stylesheet" href="css/bootstrap-responsive.min.css">
-		<link rel="stylesheet" href="css/docs.css">
-		<link rel="stylesheet" href="css/prettify.css">
-		<link rel="stylesheet" href="css/main.css">
-		<script src="js/vendor/modernizr-2.6.2-respond-1.1.0.min.js"></script>
+		<link rel="stylesheet" href="css/bootstrap.min.css?v=1.0">
+		<link rel="stylesheet" href="css/bootstrap-responsive.min.css?v=1.0">
+		<link rel="stylesheet" href="css/docs.css?v=1.0">
+		<link rel="stylesheet" href="css/prettify.css?v=1.0">
+		<link rel="stylesheet" href="css/main.min.css?v=1.0">
+		<script src="js/vendor/head.min.js?v=1.0"></script>
 	</head>
 	<body data-spy="scroll" data-target=".bs-docs-sidebar">
 		<!--[if lt IE 7]>
@@ -64,12 +64,8 @@
 				<div class="span2">
 					<div style="background: none; box-shadow: none; margin: 0;" title="filtro" class="bs-docs-sidenav filtroListar"></div>
 				</div>
-				<div class="span8">
-					<div>
-						<div class="row">
-							<div title="listar" class="iparaListar"></div>
-						</div>
-					</div>
+				<div class="span10">
+					<div title="listar" class="iparaListar"></div>
 				</div>
 			</div>
 		</div>
@@ -81,18 +77,22 @@
 
 			</div>
 		</footer>
-		<script src="js/vendor/widgets.js"></script>
-		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js?v=1.0"></script>
 		<script>
-			window.jQuery || document.write('<script src="js/vendor/jquery-1.8.3.min.js"><\/script>')
+			window.jQuery || document.write('<script src="js/vendor/jquery-1.8.3.min.js?v=1.0"><\/script>')
 		</script>
-		<script src="js/vendor/jquery.tmpl.min.js"></script>
-		<script src="js/vendor/jquery.paging.min.js"></script>
-		<script src="js/vendor/bootstrap.min.js"></script>
-		<script src="js/vendor/prettify.js"></script>
-		<script src="js/vendor/sessionstorage.1.4.js"></script>
-		<script src="js/config.js"></script>
-		<script src="js/api.js"></script>
-		<script src="js/main.js"></script>
+		<script>
+			head.js(
+				{modernizr:"js/vendor/modernizr-2.6.2-respond-1.1.0.min.js?v=1.0"},
+				{widgets:"js/vendor/widgets.js?v=1.0"},
+				{jqueryTmpl:"js/vendor/jquery.tmpl.min.js?v=1.0"},
+				{jqueryPaging:"js/vendor/jquery.paging.min.js?v=1.0"},
+				{bootstrap:"js/vendor/bootstrap.min.js?v=1.0"},
+				{prettify:"js/vendor/prettify.js?v=1.0"},
+				{sessionStorage:"js/vendor/sessionstorage.1.4.js?v=1.0"},
+				{configuracao:"js/config.js?v=1.0"},
+				{api:"js/api.min.js?v=1.0"}
+			);
+		</script>
 	</body>
 </html>

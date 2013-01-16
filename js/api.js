@@ -5,6 +5,7 @@
 //  Created by Pedro Oscar Nascimento on 2013-01-11.
 //  Copyright 2013 iPará Classificados. All rights reserved.
 //
+//Configurações e inicializações
 ( function() {
 		var method;
 		var noop = function noop() {
@@ -34,7 +35,7 @@
 			}
 		});
 
-		//Carrega os templates e adiciona o body
+		//Carrega os templates e adiciona no body
 		$.get('tmpl/_ipara.tmpl.htm', function(templates) {
 			$('body').append(templates);
 		});
@@ -53,11 +54,44 @@
 			sessionStorage["faixa"] = -1;
 			sessionStorage["bairro"] = 0;
 		}
-	
+		
+		//Carrega API do Facebook
+		$('body').append('<div id="fb-root"></div>'); 
+		(function(d, s, id) {
+			var js, fjs = d.getElementsByTagName(s)[0];
+			if (d.getElementById(id))
+				return;
+			js = d.createElement(s);
+			js.id = id;
+			js.src = "//connect.facebook.net/pt_BR/all.js#xfbml=1&appId=248204328585913";
+			fjs.parentNode.insertBefore(js, fjs);
+		}(document, 'script', 'facebook-jssdk'));
+		
+		//Carrega Google Analytics
+		var _gaq = [['_setAccount', conf.googleAnalytics], ['_trackPageview']];
+		(function(d, t) {
+			var g = d.createElement(t), s = d.getElementsByTagName(t)[0];
+			g.src = ('https:' == location.protocol ? '//ssl' : '//www') + '.google-analytics.com/ga.js';
+			s.parentNode.insertBefore(g, s)
+		}(document, 'script'));
+		
+		//Carrega API do Twitter
+		!function(d, s, id) {
+		var js, fjs = d.getElementsByTagName(s)[0];
+		if (!d.getElementById(id)) {
+			js = d.createElement(s);
+			js.id = id;
+			js.src = "//platform.twitter.com/widgets.js";
+			fjs.parentNode.insertBefore(js, fjs);
+		}
+		}(document, "script", "twitter-wjs"); 
+
+
 	}());
 
 // definindo o namespace ipara (para separação de escopo)
 var ipara = {};
+//Extendendo o namespace (incluindo funcionalidades)
 (function() {
 
 	//Pega o userid a partir do username
@@ -106,7 +140,7 @@ var ipara = {};
 			});
 		});
 	};
-	
+
 	//Pega outros anúncios (com destaque menor)
 	ipara.carregaRecentes = function() {
 		var userid = ipara.getUserId();
@@ -119,11 +153,10 @@ var ipara = {};
 				success : function(recentes) {
 					//Carregando itens de ofertas recentes
 					for (var i = 0, j = recentes.length; i < j; i++) {
-						if(((conf.qtdeOfertasRecentes - i) % 6) === 0){
+						if (((conf.qtdeOfertasRecentes - i) % 6) === 0) {
 							$(".recentes").parent().append('<ul class="thumbnails recentes"></ul>');
 							$('#recentesItemTmpl').tmpl(recentes[i]).appendTo(".recentes:last");
-						}
-						else {
+						} else {
 							$('#recentesItemTmpl').tmpl(recentes[i]).appendTo(".recentes:last");
 						}
 					}
@@ -166,11 +199,10 @@ var ipara = {};
 							success : function(anuncios) {
 								//Carregando itens do listar de acordo com o template
 								for (var i = 0, j = anuncios.length; i < j; i++) {
-									var html = anuncios[i].descricao;
-									var div = document.createElement("div");
-									div.innerHTML = html;
-									var texto = div.textContent || div.innerText || "";
-									anuncios[i].descricao = texto;
+									//Convertendo caracteres em html para depois remover tags
+									var html = $("<span />", { html: anuncios[i].descricao }).text();
+									var texto = html.replace(/(<([^>]+)>)/ig,"");
+									anuncios[i].descricao = texto.substr(0,456) + "...";
 									$('#listarItemTmpl').tmpl(anuncios[i]).appendTo(".iparaListar .row");
 								}
 							},
@@ -349,26 +381,26 @@ var ipara = {};
 			async : false,
 			dataType : 'jsonp',
 			success : function(anuncio) {
-				if($(".iparaDetalhes .fotosAnuncio").length > 0){
-					
+				if ($(".iparaDetalhes .fotosAnuncio").length > 0) {
+
 					//Click nas fotos do slider abre a galeria
-					$(".fotosAnuncio img").live("click",function(){
+					$(".fotosAnuncio img").live("click", function() {
 						$("#galeriaDeFotos a:first").click();
 					});
-					
+
 					$.ajax({
-						url : "http://www.ipara.com.br/iParaServices/fotos/anuncio/"+idAnuncio+"?format=json",
+						url : "http://www.ipara.com.br/iParaServices/fotos/anuncio/" + idAnuncio + "?format=json",
 						crossDomain : true,
 						async : false,
 						dataType : 'jsonp',
-						beforeSend:function(){
+						beforeSend : function() {
 							var inner = '<div class="carousel-inner"></div><a class="left carousel-control" href="#fotosAnuncio" data-slide="prev">&laquo;</a><a class="right carousel-control" href="#fotosAnuncio" data-slide="next">&raquo;</a>';
-							$('.iparaDetalhes .fotosAnuncio').css("width",$(".iparaDetalhes .fotosAnuncio").data("maxwidth")+"px").html(inner);
-							
+							$('.iparaDetalhes .fotosAnuncio').css("width", $(".iparaDetalhes .fotosAnuncio").data("maxwidth") + "px").html(inner);
+
 						},
 						success : function(fotos) {
 							var div = document.createElement("div");
-							div.setAttribute("id","galeriaDeFotos");
+							div.setAttribute("id", "galeriaDeFotos");
 							$("body").append(div);
 							for (var i = 0, j = fotos.length; i < j; i++) {
 								fotos[i].UserId = anuncio.UserId;
@@ -381,55 +413,126 @@ var ipara = {};
 						}
 					});
 				}
-				
+
 				//Carrega contatos
-				if($(".iparaDetalhes .contatos").length > 0){
-					$(".iparaDetalhes .contatos").html($('#contatosTmpl').tmpl({titulo:"Plantão de Vendas", fone:conf.fonePrincipal, twitter:conf.twitter, facebook:conf.facebook, email:conf.email}));
+				if ($(".iparaDetalhes .contatos").length > 0) {
+					$(".iparaDetalhes .contatos").html($('#contatosTmpl').tmpl({
+						titulo : "Plantão de Vendas",
+						fone : conf.fonePrincipal,
+						twitter : conf.twitter,
+						facebook : conf.facebook,
+						email : conf.email
+					}));
 				}
-				
+
+
 				//Renderiza informações do anúncio
-				if($(".iparaDetalhes .infoAnuncio").length > 0){
+				if ($(".iparaDetalhes .infoAnuncio").length > 0) {
+					
+					//Converte html caracteres em tags
+					anuncio.descricao = $('<span />', {
+						html : anuncio.descricao
+					}).text();
+
+					anuncio.valor = anuncio.valor === "0,00" ? "" : "R$"+anuncio.valor;
 					$('#infoAnuncioTmpl').tmpl(anuncio).appendTo(".iparaDetalhes .infoAnuncio");
 				}
-				
+
 				//Pega o endereço e carrega o mapa
-				if($("#mapa").length > 0){
+				if ($("#mapa").length > 0) {
 					$.ajax({
-	                    url: "http://www.ipara.com.br/iParaServices/endereco/" + anuncio.id_endereco + "?format=json",
-	                    crossDomain: true,
-	                    cache: true,
-	                    dataType: 'jsonp',
-	                    success: function (endereco) {
-	                       
-	                        //carrga o mapa
-	                        $("#mapa span").goMap({
-	                            maptype: 'ROADMAP',
-	                            zoom: 15,
-	                            markers: [{
-	                                latitude: endereco.latitude,
-	                                longitude: endereco.longitude,
-	                                id: 'marcador',
-	                                draggable: false,
-	                                html: {
-	                                    content: anuncio.titulo + '<br/>' + endereco.logradouro + ", " + endereco.numero + "<br/>" + endereco.bairro + " - " + endereco.local,
-	                                    popup: true
-	                                }
-	                            }],
-	                            disableDoubleClickZoom: true
-	                        });
-	                        
-	                    }
-	                });
-               }
-				
+						url : "http://www.ipara.com.br/iParaServices/endereco/" + anuncio.id_endereco + "?format=json",
+						crossDomain : true,
+						cache : true,
+						dataType : 'jsonp',
+						success : function(endereco) {
+
+							//carrga o mapa
+							$("#mapa span").goMap({
+								maptype : 'ROADMAP',
+								zoom : 15,
+								markers : [{
+									latitude : endereco.latitude,
+									longitude : endereco.longitude,
+									id : 'marcador',
+									draggable : false,
+									html : {
+										content : anuncio.titulo + '<br/>' + endereco.logradouro + ", " + endereco.numero + "<br/>" + endereco.bairro + " - " + endereco.local,
+										popup : true
+									}
+								}],
+								disableDoubleClickZoom : true
+							});
+
+						}
+					});
+				}
+
 			}
 		});
 	};
 
 })();
 
-//Funções auxiliares------------------------------
+//Chamadas para as funções definidas no namespace ipara
+//Carregar Carousel se houver
+if ($("#iparaCarousel").length > 0) {
+	ipara.carregaDestaques();
+}
 
+//Carregar o componente de listar se houver
+if ($(".iparaListar").length > 0) {
+	ipara.carregaListar();
+}
+
+//Carrega o componente de filtro se houver
+if ($(".filtroListar").length > 0) {
+	ipara.carregaFiltros();
+}
+
+//Carregar os componentes de detalhes
+if ($(".iparaDetalhes").length > 0) {
+	var idAnuncio = getQueryString()["id"];
+	ipara.carregaDetalhes(idAnuncio);
+
+}
+
+//Carrega o componente de ofertas recentes se houver
+if ($(".recentes").length > 0) {
+	ipara.carregaRecentes();
+}
+
+//Chamadas de funções que deverão ser executadas apenas quando tudo for carregado
+$(window).load(function() {
+	//Carrega galeria prettyphoto se houver galeria na pagina
+	if ($("a[rel^='prettyPhoto']").length > 0)
+		$("a[rel^='prettyPhoto']").prettyPhoto();
+
+	//Carrega widgets do twitter se houver
+	twttr.widgets.load();
+
+	//Habilita o chat
+
+	$('.chat').live('click', function() {
+		$("#chat-box-header").trigger('click');
+	});
+
+	var userid = ipara.getUserId();
+	userid.success(function(user) {
+		LCSKChat.config({
+			opId : user.UserId,
+			headerBackgroundColor : chat.headerBackgroundColor,
+			headerTextColor : chat.headerTextColor,
+			headerBorderColor : chat.headerBorderColor,
+			headerGradientStart : chat.headerGradientStart,
+			headerGradientEnd : chat.headerGradientEnd,
+			boxBorderColor : chat.boxBorderColor
+		});
+		LCSKChat.init();
+	});
+});
+
+//Funções auxiliares------------------------------
 //Função de formatação do paginador
 function formatPagination(type) {
 	switch (type) {
@@ -473,4 +576,3 @@ function getQueryString() {
 
 	return result;
 }
-

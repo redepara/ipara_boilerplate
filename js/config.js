@@ -7,7 +7,8 @@ var conf = {
 	email:"atendimento@deborarealeimoveis.com.br",
 	twitter:"@DeboraReale",
 	facebook:"deborareale.chaoeteto",
-	fonePrincipal:"(91) 3083 7678"
+	fonePrincipal:"(91) 3083 7678",
+	googleAnalytics:"UA-XXXXX-X"
 };
 
 //configurações do chat
