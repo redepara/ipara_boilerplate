@@ -6,7 +6,7 @@
 //  Copyright 2013 iPará Classificados. All rights reserved.
 //
 //Configurações e inicializações
-( function() {
+(function() {
 		var method;
 		var noop = function noop() {
 		};
@@ -85,9 +85,7 @@
 			fjs.parentNode.insertBefore(js, fjs);
 		}
 		}(document, "script", "twitter-wjs"); 
-
-
-	}());
+}());
 
 // definindo o namespace ipara (para separação de escopo)
 var ipara = {};
@@ -474,6 +472,110 @@ var ipara = {};
 
 })();
 
+
+//Caso esteja na pagina agendarVisita.html
+//verificar se o usuario tem acesso ao serviço
+if ($(".agendaVisita").length > 0) {
+	var userid = ipara.getUserId();
+	userid.success(function(user) {
+		//Busca os serviços que o usuário tem acesso
+		$.ajax({
+			url : "http://www.ipara.com.br/iparaServices/servicos/" + user.UserId + "?format=json",
+			crossDomain : true,
+			async : false,
+			dataType : 'jsonp',
+			success : function(servicos) {
+				for (var i = 0, j = servicos.length; i < j; i++) {
+					if (servicos[i].id_servico === "3" && servicos[i].status === "True") {
+						//Plugin de data
+						$('.datepicker').datepicker({format:'dd/mm/yyyy'});
+						//Carrega imóveis para o cliente selecionar
+						var totalUsuario = ipara.getTotalAnuncios(user.UserId);
+						totalUsuario.success(function(total){
+							$.ajax({
+								url : "http://www.ipara.com.br/iparaServices/imoveis/ordenar/pagesize/TITULO/1/"+total+"/0/0/0/0/0/_/_/-1/"+user.UserId+"?format=json",
+								crossDomain : true,
+								async : false,
+								dataType : 'jsonp',
+								success : function(anuncios) {
+									for (var i = 0, j = anuncios.length; i < j; i++) {
+										$("#id_anuncio").append('<option value="'+anuncios[i].id_anuncio+'">'+anuncios[i].titulo+' - '+anuncios[i].local+'/PA</option>');
+									}
+								},
+								complete:function(){
+									//Aplica o filterbytext
+									$("#id_anuncio").filterByText("#inputBusca",false);
+								}
+							});
+						});
+						//Validação do formulário
+						$('#formAgenda').validate({
+							rules : {
+								email : {
+									required : true,
+									email : true
+								},
+								nome : {
+									required : true
+								},
+								data_in : {
+									required : true
+								}
+							},
+							messages: {						     
+								email: { 
+									required: "Por favor insira seu email para entrarmos em contato.",
+									email: "Insira um email válido."
+								},
+								nome: { 
+									required: "Por favor insira seu nome."
+								},
+								data_in: { 
+									required: "Escolha a data que você deseja fazer a visita."
+								}
+						    },
+							highlight : function(label) {
+								$(label).closest('.control-group').addClass('error');
+							},
+							success : function(label) {
+								label.text('OK!').addClass('valid').closest('.control-group').addClass('success');
+							}
+						});
+						//Submit do form
+						$("#formAgenda").live('submit',function () {
+				            $("#status").val("false");
+				            $("#userId").val(user.UserId);
+				            $("#data_fim").val($("#data_in").val());
+				            $("#data_update").val(dataAtual());
+				            $("#descricao").val($("#nome").val() + " - " + $("#email").val() + " - " + $("#telefone").val() + " [Preferência de Horário: " + $("#horario").val() + "]");
+				            $("#titulo").val($("#id_anuncio option:selected").html());
+				            var data = $('#formAgenda').serializeObject();
+				            $.ajax({
+								url : "http://ipara.com.br/iParaServices/agendavisita?format=json",
+								crossDomain : true,
+								async : false,
+								dataType : 'jsonp',
+								data:data,
+								success : function(agenda) {
+									console.log(agenda === true);
+									console.log(agenda);
+									if(agenda === true){
+										$("#formAgenda").hide("slow");
+										$("#formAgenda").parent().append("<h4>Visita agendada com sucesso. Aguarde que entraremos em contato com você.</h4>")
+									}
+				            	}
+				            });
+        					return false;
+				        });
+
+
+					}
+				}
+			}
+		});
+	});
+}
+
 //Chamadas para as funções definidas no namespace ipara
 //Carregar Carousel se houver
 if ($("#iparaCarousel").length > 0) {
@@ -511,24 +613,37 @@ $(window).load(function() {
 	//Carrega widgets do twitter se houver
 	twttr.widgets.load();
 
-	//Habilita o chat
-
-	$('.chat').live('click', function() {
-		$("#chat-box-header").trigger('click');
-	});
-
 	var userid = ipara.getUserId();
-	userid.success(function(user) {
-		LCSKChat.config({
-			opId : user.UserId,
-			headerBackgroundColor : chat.headerBackgroundColor,
-			headerTextColor : chat.headerTextColor,
-			headerBorderColor : chat.headerBorderColor,
-			headerGradientStart : chat.headerGradientStart,
-			headerGradientEnd : chat.headerGradientEnd,
-			boxBorderColor : chat.boxBorderColor
-		});
-		LCSKChat.init();
+	userid.success(function(user) {	
+		//Busca os serviços que o usuário tem acesso
+		$.ajax({
+			url : "http://www.ipara.com.br/iparaServices/servicos/"+user.UserId+"?format=json",
+			crossDomain : true,
+			async : false,
+			dataType : 'jsonp',
+			success : function(servicos) {
+				for (var i = 0, j = servicos.length; i < j; i++) {
+					if (servicos[i].id_servico === "1" && servicos[i].status === "True") {
+						//Habilita o chat
+						$('.chat').live('click', function() {
+							$("#chat-box-header").trigger('click');
+						});
+						//Configura e inicializa o chat
+						LCSKChat.config({
+							opId : user.UserId,
+							headerBackgroundColor : chat.headerBackgroundColor,
+							headerTextColor : chat.headerTextColor,
+							headerBorderColor : chat.headerBorderColor,
+							headerGradientStart : chat.headerGradientStart,
+							headerGradientEnd : chat.headerGradientEnd,
+							boxBorderColor : chat.boxBorderColor
+						});
+						LCSKChat.init();
+					}
+				}
+			}
+		}); 
+		
 	});
 });
 
@@ -569,10 +684,36 @@ function formatPagination(type) {
 //Função para pegar objeto querystring da url
 function getQueryString() {
 	var result = {}, queryString = location.search.substring(1), re = /([^&=]+)=([^&]*)/g, m;
-
 	while ( m = re.exec(queryString)) {
 		result[decodeURIComponent(m[1])] = decodeURIComponent(m[2]);
 	}
-
 	return result;
 }
+
+//Função que retorna data atual
+function dataAtual() {
+	var fullDate = new Date()
+	//Thu May 19 2011 17:25:38 GMT+1000 {}
+	//convert month to 2 digits
+	var twoDigitMonth = ((fullDate.getMonth().length + 1) === 1) ? (fullDate.getMonth() + 1) : '0' + (fullDate.getMonth() + 1);
+	var currentDate = fullDate.getDate() + "/" + twoDigitMonth + "/" + fullDate.getFullYear();
+	return currentDate;
+}
+
+//Adiciona ao jquery função de serialização de objetos
+$.fn.serializeObject = function()
+{
+    var o = {};
+    var a = this.serializeArray();
+    $.each(a, function() {
+        if (o[this.name] !== undefined) {
+            if (!o[this.name].push) {
+                o[this.name] = [o[this.name]];
+            }
+            o[this.name].push(this.value || '');
+        } else {
+            o[this.name] = this.value || '';
+        }
+    });
+    return o;
+};

@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js">
+	<!--<![endif]-->
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<title>iPará Html5 Boilerplate</title>
+		<meta name="description" content="Site base para criação de Sites Conectados.">
+		<meta name="viewport" content="width=device-width">
+		<link rel="stylesheet" href="css/bootstrap.min.css?v=1.0">
+		<link rel="stylesheet" href="css/bootstrap-responsive.min.css?v=1.0">
+		<link rel="stylesheet" href="css/docs.css?v=1.0">
+		<link rel="stylesheet" href="css/prettify.css?v=1.0">
+		<link rel="stylesheet" href="css/datepicker.css">
+		<link rel="stylesheet" href="css/main.css?v=1.0">
+		<script src="js/vendor/head.min.js?v=1.0"></script>
+	</head>
+	<body data-spy="scroll" data-target=".bs-docs-sidebar">
+		<!--[if lt IE 7]>
+		<p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
+		<![endif]-->
+
+		<!-- Navbar
+		================================================== -->
+		<div class="navbar navbar-inverse navbar-fixed-top">
+			<div class="navbar-inner">
+				<div class="container">
+					<button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+					</button>
+					<a class="brand" target="_blank" href="http://www.ipara.com.br">iPará Classificados</a>
+					<div class="nav-collapse collapse">
+						<ul class="nav">
+							<li class="">
+								<a href="home.html">Home</a>
+							</li>
+							<li class="">
+								<a href="listar.html">Listar</a>
+							</li>
+							<li class="">
+								<a href="agendarVisita.html">Agendar Visita</a>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Subhead
+		================================================== -->
+		<header class="jumbotron subhead" id="overview">
+			<div class="container">
+				<h1>iPará API de Componentes HTML5</h1>
+				<p class="lead">
+					Agende uma Visita
+				</p>
+			</div>
+		</header>
+
+		<div class="container">
+			<div class="row agendaVisita">
+				<div class="page-header">
+					<h1>Agende uma visita <small>Para seu conforto, escolha a melhor data e horário para visitar um de nossos imóveis. Entraremos em contato para confirmar sua visita.</small></h1>
+				</div>
+				<form action="http://www.ipara.com.br/iparaServices/agendavisita" id="formAgenda">
+					<div class="span6 form-horizontal">
+						<div class="control-group">
+							<label class="control-label" for="nome">Nome</label>
+							<div class="controls">
+								<input class="span3" type="text" id="nome" name="nome" placeholder="Digite seu nome">
+							</div>
+						</div>
+						<div class="control-group">
+							<label class="control-label" for="email">Email</label>
+							<div class="controls">
+								<input class="span3" type="text" id="email" name="email" placeholder="Digite email válido">
+							</div>
+						</div>
+						<div class="control-group">
+							<label class="control-label" for="telefone">Telefone</label>
+							<div class="controls">
+								<input class="span3" type="text" id="telefone" name="telefone" placeholder="Digite um telefone p/contato">
+							</div>
+						</div>
+						<div class="control-group">
+							<label class="control-label" for="data">Data</label>
+							<div class="controls date" data-date-format="dd/mm/yyyy">
+								<input class="span2 datepicker uneditable-input" type="text" id="data_in" name="data_in" placeholder="Data desejada p/visita">
+							</div>
+						</div>
+						<div class="control-group">
+							<label class="control-label" for="horario">Melhor horário</label>
+							<div class="controls">
+								<label class="radio inline"><input type="radio" id="horario" name="horario" value="manhã">Manhã</label>
+								<label class="radio inline"><input type="radio" id="horario" name="horario" value="tarde">Tarde</label>
+							</div>
+						</div>
+					</div>
+					<div class="span6">
+						<div class="control-group">
+							<div class="controls">
+								<input class="span5" type="text" id="inputBusca" placeholder="buscar imóvel">
+							</div>
+						</div>
+						<div class="control-group">
+							<div class="controls">
+								<select class="span5"  id="id_anuncio" multiple="multiple" name="id_anuncio" size="12">
+								</select>
+							</div>
+						</div>
+						<div class="control-group">
+							<div class="controls">
+								<button type="submit" class="btn">
+									Solicitar Agendamento
+								</button>
+							</div>
+						</div>
+					</div>
+					<input type="hidden" id="status" name="status" />
+					<input type="hidden" id="userId" name="userId" />
+					<input type="hidden" id="titulo" name="titulo" />
+					<input type="hidden" id="descricao" name="descricao" />
+					<input type="hidden" id="data_update" name="data_update" />
+					<input type="hidden" id="data_fim" name="data_fim" />
+				</form>
+			</div>
+		</div>
+
+		<!-- Footer
+		================================================== -->
+		<footer class="footer">
+			<div class="container">
+
+			</div>
+		</footer>
+		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js?v=1.0"></script>
+		<script>
+			window.jQuery || document.write('<script src="js/vendor/jquery-1.8.3.min.js?v=1.0"><\/script>')
+		</script>
+		<script>
+			head.js({
+				modernizr : "js/vendor/modernizr-2.6.2-respond-1.1.0.min.js?v=1.0"
+			}, {
+				widgets : "js/vendor/widgets.js?v=1.0"
+			}, {
+				jqueryTmpl : "js/vendor/jquery.tmpl.min.js?v=1.0"
+			}, {
+				jqueryPaging : "js/vendor/jquery.paging.min.js?v=1.0"
+			}, {
+				jqueryValidate : "js/vendor/jquery.validate.min.js?v=1.0"
+			}, {
+				jqueryFilterByTextBox : "js/vendor/jquery.filterbytextbox.js?v=1.0"
+			}, {
+				bootstrap : "js/vendor/bootstrap.min.js?v=1.0"
+			}, {
+				prettify : "js/vendor/prettify.js?v=1.0"
+			}, {
+				sessionStorage : "js/vendor/sessionstorage.1.4.js?v=1.0"
+			}, {
+				datepicker : "js/bootstrap-datepicker.js?v=1.0"
+			}, {
+				configuracao : "js/config.js?v=1.0"
+			}, {
+				api : "js/api.js"
+			});
+		</script>
+	</body>
+</html>
