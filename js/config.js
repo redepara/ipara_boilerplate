@@ -1,13 +1,13 @@
 //configurações gerais
 var conf = {
-	usuario : "deborarealeimoveis",
-	qtdeDestaques : 7,
+	usuario : "ducarveiculos",
+	qtdeDestaques : 8,
 	qtdeOfertasRecentes:12,
 	anunciosPorPagina : 5,
-	email:"atendimento@deborarealeimoveis.com.br",
-	twitter:"@DeboraReale",
-	facebook:"deborareale.chaoeteto",
-	fonePrincipal:"(91) 3083 7678",
+	email:"ducar00@gmail.com",
+	twitter:"@ducarveiculos",
+	facebook:"ducarveiculos.ducarveiculos",
+	fonePrincipal:"(91) 3323 0707",
 	googleAnalytics:"UA-XXXXX-X"
 };
 
