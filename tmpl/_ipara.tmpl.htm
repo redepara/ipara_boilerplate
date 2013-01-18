@@ -1,27 +1,27 @@
 <!-- Destaques template -->
 <script id="destaquesCarouselItemTmpl" type="x-jquery-tmpl">
 	<div class="item">
-		<a href="detalhes.html?id=${id_anuncio}">
-			<img width="670px" height="502px" src="http://www.ipara.com.br/ipara/Media/createThumbnail?path=http://www.ipara.com.br/users/${UserId}/fotos/${foto}&maxWidth=670&maxheight=670&extension=png" alt="" />
-			<div class="carousel-caption">
-				<h4>${titulo}</h4>
-				<p>${descricao}</p>
-			</div>
-		</a>
+	<a href="detalhes.html?id=${id_anuncio}">
+	<img width="670px" height="502px" src="http://www.ipara.com.br/ipara/Media/createThumbnail?path=http://www.ipara.com.br/users/${UserId}/fotos/${foto}&maxWidth=670&maxheight=670&extension=png" alt="" />
+	<div class="carousel-caption">
+	<h4>${titulo}</h4>
+	<p>${descricao}</p>
+	</div>
+	</a>
 	</div>
 </script>
 <!-- Ofertas recentes -->
 <script id="recentesItemTmpl" type="x-jquery-tmpl">
 	<li class="span2">
-		<div class="thumbnail">
-			<img height="120px" src="http://www.ipara.com.br/ipara/Media/createThumbnail?path=http://www.ipara.com.br/users/${UserId}/fotos/${foto}&maxWidth=160&maxheight=120&extension=png" />
-			<div class="caption">
-				<h6>${titulo}</h6>
-				<p>
-					<a href="detalhes.html?id=${id_anuncio}" class="btn btn-primary">Detalhes</a>
-				</p>
-			</div>
-		</div>
+	<div class="thumbnail">
+	<img height="120px" src="http://www.ipara.com.br/ipara/Media/createThumbnail?path=http://www.ipara.com.br/users/${UserId}/fotos/${foto}&maxWidth=160&maxheight=120&extension=png" />
+	<div class="caption">
+	<h6>${titulo}</h6>
+	<p>
+	<a href="detalhes.html?id=${id_anuncio}" class="btn btn-primary">Detalhes</a>
+	</p>
+	</div>
+	</div>
 	</li>
 </script>
 <!-- Item da lista de anúncios -->
@@ -34,7 +34,7 @@
 	${descricao}
 	</p>
 	<p>
-		<br/>
+	<br/>
 	<a class="btn offset5" href="detalhes.html?id=${id_anuncio}">Ver detalhes &raquo;</a>
 	</p>
 	</div>
@@ -90,6 +90,68 @@
 	<small class="btn-danger">${valor}</small>
 	<p>{{html descricao}}</p>
 	<div id="mapa"><span></span></div>
+</script>
+<!-- Formulário de Agendamento de Visistas -->
+<script id="formAgendaTmpl" type="x-jquery-tmpl">
+	<div class="span6 form-horizontal">
+	<div class="control-group">
+	<label class="control-label" for="nome">Nome</label>
+	<div class="controls">
+	<input class="span3" type="text" id="nome" name="nome" placeholder="Digite seu nome">
+	</div>
+	</div>
+	<div class="control-group">
+	<label class="control-label" for="email">Email</label>
+	<div class="controls">
+	<input class="span3" type="text" id="email" name="email" placeholder="Digite email válido">
+	</div>
+	</div>
+	<div class="control-group">
+	<label class="control-label" for="telefone">Telefone</label>
+	<div class="controls">
+	<input class="span3" type="text" id="telefone" name="telefone" placeholder="Digite um telefone p/contato">
+	</div>
+	</div>
+	<div class="control-group">
+	<label class="control-label" for="data">Data</label>
+	<div class="controls date" data-date-format="dd/mm/yyyy">
+	<input class="span2 datepicker uneditable-input" type="text" id="data_in" name="data_in" placeholder="Data desejada p/visita">
+	</div>
+	</div>
+	<div class="control-group">
+	<label class="control-label" for="horario">Melhor horário</label>
+	<div class="controls">
+	<label class="radio inline"><input type="radio" id="horario" name="horario" value="manhã">Manhã</label>
+	<label class="radio inline"><input type="radio" id="horario" name="horario" value="tarde">Tarde</label>
+	</div>
+	</div>
+	</div>
+	<div class="span6">
+	<div class="control-group">
+	<div class="controls">
+	<input class="span5" type="text" id="inputBusca" placeholder="buscar imóvel">
+	</div>
+	</div>
+	<div class="control-group">
+	<div class="controls">
+	<select class="span5"  id="id_anuncio" multiple="multiple" name="id_anuncio" size="12">
+	</select>
+	</div>
+	</div>
+	<div class="control-group">
+	<div class="controls">
+	<button type="submit" class="btn">
+	Solicitar Agendamento
+	</button>
+	</div>
+	</div>
+	</div>
+	<input type="hidden" id="status" name="status" />
+	<input type="hidden" id="userId" name="userId" />
+	<input type="hidden" id="titulo" name="titulo" />
+	<input type="hidden" id="descricao" name="descricao" />
+	<input type="hidden" id="data_update" name="data_update" />
+	<input type="hidden" id="data_fim" name="data_fim" />
 </script>
 <!-- Carrega API do GooglePlus -->
 <script src="https://apis.google.com/js/plusone.js?v=1.0"></script>

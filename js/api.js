@@ -487,8 +487,6 @@ if ($(".agendaVisita").length > 0) {
 			success : function(servicos) {
 				for (var i = 0, j = servicos.length; i < j; i++) {
 					if (servicos[i].id_servico === "3" && servicos[i].status === "True") {
-						//Plugin de data
-						$('.datepicker').datepicker({format:'dd/mm/yyyy'});
 						//Carrega imóveis para o cliente selecionar
 						var totalUsuario = ipara.getTotalAnuncios(user.UserId);
 						totalUsuario.success(function(total){
@@ -497,7 +495,12 @@ if ($(".agendaVisita").length > 0) {
 								crossDomain : true,
 								async : false,
 								dataType : 'jsonp',
+								beforeSend:function(){
+									$('#formAgendaTmpl').tmpl({}).appendTo(".agendaVisita #formAgenda");
+								},
 								success : function(anuncios) {
+									//Plugin de data
+									$('.datepicker').datepicker({format:'dd/mm/yyyy'});
 									for (var i = 0, j = anuncios.length; i < j; i++) {
 										$("#id_anuncio").append('<option value="'+anuncios[i].id_anuncio+'">'+anuncios[i].titulo+' - '+anuncios[i].local+'/PA</option>');
 									}

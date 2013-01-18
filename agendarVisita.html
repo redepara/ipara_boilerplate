@@ -16,7 +16,7 @@
 		<link rel="stylesheet" href="css/docs.css?v=1.0">
 		<link rel="stylesheet" href="css/prettify.css?v=1.0">
 		<link rel="stylesheet" href="css/datepicker.css">
-		<link rel="stylesheet" href="css/main.css?v=1.0">
+		<link rel="stylesheet" href="css/main.min.css?v=1.0">
 		<script src="js/vendor/head.min.js?v=1.0"></script>
 	</head>
 	<body data-spy="scroll" data-target=".bs-docs-sidebar">
@@ -69,65 +69,6 @@
 					<h1>Agende uma visita <small>Para seu conforto, escolha a melhor data e horário para visitar um de nossos imóveis. Entraremos em contato para confirmar sua visita.</small></h1>
 				</div>
 				<form action="http://www.ipara.com.br/iparaServices/agendavisita" id="formAgenda">
-					<div class="span6 form-horizontal">
-						<div class="control-group">
-							<label class="control-label" for="nome">Nome</label>
-							<div class="controls">
-								<input class="span3" type="text" id="nome" name="nome" placeholder="Digite seu nome">
-							</div>
-						</div>
-						<div class="control-group">
-							<label class="control-label" for="email">Email</label>
-							<div class="controls">
-								<input class="span3" type="text" id="email" name="email" placeholder="Digite email válido">
-							</div>
-						</div>
-						<div class="control-group">
-							<label class="control-label" for="telefone">Telefone</label>
-							<div class="controls">
-								<input class="span3" type="text" id="telefone" name="telefone" placeholder="Digite um telefone p/contato">
-							</div>
-						</div>
-						<div class="control-group">
-							<label class="control-label" for="data">Data</label>
-							<div class="controls date" data-date-format="dd/mm/yyyy">
-								<input class="span2 datepicker uneditable-input" type="text" id="data_in" name="data_in" placeholder="Data desejada p/visita">
-							</div>
-						</div>
-						<div class="control-group">
-							<label class="control-label" for="horario">Melhor horário</label>
-							<div class="controls">
-								<label class="radio inline"><input type="radio" id="horario" name="horario" value="manhã">Manhã</label>
-								<label class="radio inline"><input type="radio" id="horario" name="horario" value="tarde">Tarde</label>
-							</div>
-						</div>
-					</div>
-					<div class="span6">
-						<div class="control-group">
-							<div class="controls">
-								<input class="span5" type="text" id="inputBusca" placeholder="buscar imóvel">
-							</div>
-						</div>
-						<div class="control-group">
-							<div class="controls">
-								<select class="span5"  id="id_anuncio" multiple="multiple" name="id_anuncio" size="12">
-								</select>
-							</div>
-						</div>
-						<div class="control-group">
-							<div class="controls">
-								<button type="submit" class="btn">
-									Solicitar Agendamento
-								</button>
-							</div>
-						</div>
-					</div>
-					<input type="hidden" id="status" name="status" />
-					<input type="hidden" id="userId" name="userId" />
-					<input type="hidden" id="titulo" name="titulo" />
-					<input type="hidden" id="descricao" name="descricao" />
-					<input type="hidden" id="data_update" name="data_update" />
-					<input type="hidden" id="data_fim" name="data_fim" />
 				</form>
 			</div>
 		</div>
@@ -167,7 +108,7 @@
 			}, {
 				configuracao : "js/config.js?v=1.0"
 			}, {
-				api : "js/api.js"
+				api : "js/api.min.js"
 			});
 		</script>
 	</body>
