@@ -7,4 +7,4 @@ Este projeto é um site base para criação de [Sites Conectados] (http://www.si
 
 Branches
 -
-Utilize o branch master para Sites Conectados de imóveis. Caso contrário utilizes o branch apropriado.
+Este branch deve ser utilizado para criar Sites Conectados de Veículos. Caso contrário utilize outro branch.
