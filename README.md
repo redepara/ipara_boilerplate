@@ -33,15 +33,15 @@ Para customizar basta adicionar a folha de estilo que desejar e adicionar ao seu
 Componentes
 -
 Todos os componentes são dependentes dos scripts:
-				`{modernizr:"js/vendor/modernizr-2.6.2-respond-1.1.0.min.js?v=1.0"},
-				{widgets:"js/vendor/widgets.js?v=1.0"},
-				{jqueryTmpl:"js/vendor/jquery.tmpl.min.js?v=1.0"},
-				{jqueryPaging:"js/vendor/jquery.paging.min.js?v=1.0"},
-				{bootstrap:"js/vendor/bootstrap.min.js?v=1.0"},
-				{prettify:"js/vendor/prettify.js?v=1.0"},
-				{sessionStorage:"js/vendor/sessionstorage.1.4.js?v=1.0"},
-				{configuracao:"js/config.js?v=1.0"},
-				{api:"js/api.min.js?v=1.0"}`
+				`{modernizr:"js/vendor/modernizr-2.6.2-respond-1.1.0.min.js?v=1.0"},`
+				`{widgets:"js/vendor/widgets.js?v=1.0"},`
+				`{jqueryTmpl:"js/vendor/jquery.tmpl.min.js?v=1.0"},`
+				`{jqueryPaging:"js/vendor/jquery.paging.min.js?v=1.0"},`
+				`{bootstrap:"js/vendor/bootstrap.min.js?v=1.0"},`
+				`{prettify:"js/vendor/prettify.js?v=1.0"},`
+				`{sessionStorage:"js/vendor/sessionstorage.1.4.js?v=1.0"},`
+				`{configuracao:"js/config.js?v=1.0"},`
+				`{api:"js/api.min.js?v=1.0"}`
 				
 1. Anúncios em Destaques
 Basta inserir na página o seguinte código html: `<div id="iparaCarousel"></div>`
