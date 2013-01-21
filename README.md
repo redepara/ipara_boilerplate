@@ -43,26 +43,33 @@ Todos os componentes são dependentes dos scripts:
 				`{configuracao:"js/config.js?v=1.0"},`
 				`{api:"js/api.min.js?v=1.0"}`
 				
-1. Anúncios em Destaques
+Anúncios em Destaques
+-
 Basta inserir na página o seguinte código html: `<div id="iparaCarousel"></div>`
-2. Anúncios Recentes
+Anúncios Recentes
+-
 HTML: `<ul class="recentes"></ul>`
 
-3.Filtro de Imóveis
-
-3.1 Filtro p/ abrir a página listar.html
-
+Filtro p/ abrir a página listar.html
+-
 HTML:`<div title="filtro" class="filtroListar post"></div>`
-3.2 Filtro p/ filtrar na mesma página
 
+Filtro p/ listar na mesma página
+-
 O html a seguir pode ser encontrado na página listar.html:
 `<div title="filtro" class="filtroListar"></div>`
 `<div title="listar" class="iparaListar"></div>`
-4. Detalhamento de imóveis
 
-Para carregar as fotos:
+Detalhamento de imóveis
+=
+
+Para carregar as fotos
+-
 `<div data-maxwidth="370" data-maxheight="370" id="fotosAnuncio" class="fotosAnuncio"></div>`
 `data-maxwidth` e `data-maxheight` são utilizado para setar a largura e altura máxima permitida das fotos.
-Para carregar os contatos utiliza-se:
+Para carregar os contatos
+-
 `<div class="contatos"></div>`
-Para carregar as informações do imóvel utilize o seguinte html: `<div class="infoAnuncio"></div>`
+Para carregar as informações do imóvel utilize o seguinte html
+-
+`<div class="infoAnuncio"></div>`
