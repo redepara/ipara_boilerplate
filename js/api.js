@@ -44,15 +44,7 @@
 		//A chamada do serviço de filtro é a seguinte
 		///{id_subcategoria}/{id_categoria_marca}/{id_modelo}/{id_localidade}/{id_bairro}/{id_vecor}/{faixa}/{UserId}
 		if ( typeof sessionStorage["manterFiltro"] === "undefined" || sessionStorage["manterFiltro"] === "false") {
-			sessionStorage["subcategoria"] = 0;
-			sessionStorage["marca"] = 0;
-			sessionStorage["modelo"] = 0;
-			sessionStorage["localidade"] = 0;
-			sessionStorage["bairro"] = 0;
-			sessionStorage["vecor"] = 0;
-			sessionStorage["faixa"] = -1;
-			sessionStorage["anoIni"] = 1800;
-			sessionStorage["anoFim"] = new Date().getFullYear() + 1;
+			sessionStorage["categoria"] = 0;
 		}
 
 		//Carrega API do Facebook
@@ -122,7 +114,7 @@ var ipara = {};
 		var userid = ipara.getUserId();
 		userid.success(function(data) {
 			$.ajax({
-				url : "http://www.ipara.com.br/iparaServices/veiculos/destaques/" + conf.qtdeDestaques + "/" + data.UserId + "?format=json",
+				url : "http://redepara.cloudapp.net:82/produtos/destaque/"+conf.email+"?format=json",
 				crossDomain : true,
 				async : false,
 				dataType : 'jsonp',

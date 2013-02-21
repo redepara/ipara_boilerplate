@@ -4,7 +4,7 @@ var conf = {
 	qtdeDestaques : 8,
 	qtdeOfertasRecentes:12,
 	anunciosPorPagina : 5,
-	email:"ducar00@gmail.com",
+	email:"comercial@bestequipamentos.com.br",
 	twitter:"@ducarveiculos",
 	facebook:"ducarveiculos.ducarveiculos",
 	fonePrincipal:"(91) 3323 0707",
