@@ -7,7 +7,7 @@ Este projeto é um site base para criação de [Sites Conectados] (http://www.si
 
 Branches
 -
-Este branch deve ser utilizado para criar Sites Conectados de Veículos. Caso contrário utilize outro branch.
+Este branch deve ser utilizado para criar Sites Conectados de Produtos. Caso contrário utilize outro branch.
 
 Configurações
 -
@@ -24,6 +24,8 @@ As configurações básicas são:
 - googleAnalytics:"UA-XXXXX-X"
 
 Preenchidas essas informações o site já estará funcionando com os anúncios cadastrados na ferramenta PINGO.
+
+**Para o Pingo de Produtos o *email* deverá ser o mesmo que foi utilizado no cadastro.**
 
 Customização
 -

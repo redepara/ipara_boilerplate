@@ -1,13 +1,13 @@
 //configurações gerais
 var conf = {
-	usuario : "ducarveiculos",
-	qtdeDestaques : 8,
-	qtdeOfertasRecentes:12,
-	anunciosPorPagina : 5,
+	usuario : "best",
+	qtdeDestaques : 5,
+	qtdeOfertasRecentes:5,
+	anunciosPorPagina : 2,
 	email:"comercial@bestequipamentos.com.br",
-	twitter:"@ducarveiculos",
-	facebook:"ducarveiculos.ducarveiculos",
-	fonePrincipal:"(91) 3323 0707",
+	twitter:"@best",
+	facebook:"best.best",
+	fonePrincipal:"(91) 3222 2222",
 	googleAnalytics:"UA-XXXXX-X"
 };
 

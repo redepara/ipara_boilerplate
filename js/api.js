@@ -43,7 +43,7 @@
 		//Inicializa as variáveis de filtro no sessionStorage
 		//A chamada do serviço de filtro é a seguinte
 		///{id_subcategoria}/{id_categoria_marca}/{id_modelo}/{id_localidade}/{id_bairro}/{id_vecor}/{faixa}/{UserId}
-		if ( typeof sessionStorage["manterFiltro"] === "undefined" || sessionStorage["manterFiltro"] === "false") {
+		if (typeof sessionStorage["manterFiltro"] === "undefined" || sessionStorage["manterFiltro"] === "false") {
 			sessionStorage["categoria"] = 0;
 		}
 
@@ -100,13 +100,23 @@ var ipara = {};
 	};
 
 	//Pega o total de anúncios do usuário
-	ipara.getTotalAnuncios = function(userid) {
-		return $.ajax({
-			url : "http://www.ipara.com.br/iparaServices/veiculos/anomodelo/" + sessionStorage['anoIni'] + "/" + sessionStorage['anoFim'] + "/" + sessionStorage['subcategoria'] + "/" + sessionStorage['marca'] + "/" + sessionStorage['modelo'] + "/" + sessionStorage['localidade'] + "/" + sessionStorage['bairro'] + "/" + sessionStorage['vecor'] + "/" + userid + "?format=json",
-			crossDomain : true,
-			async : false,
-			dataType : 'jsonp'
-		});
+	ipara.getTotalAnuncios = function() {
+		if (sessionStorage["categoria"] != 0){
+			return $.ajax({
+				url : "http://redepara.cloudapp.net:82/produtos/total/"+conf.email+"/"+sessionStorage['categoria']+"?format=json",
+				crossDomain : true,
+				async : false,
+				dataType : 'jsonp'
+			});
+		}
+		else {
+			return $.ajax({
+				url : "http://redepara.cloudapp.net:82/produtos/total/"+conf.email+"/?format=json",
+				crossDomain : true,
+				async : false,
+				dataType : 'jsonp'
+			});
+		}
 	};
 
 	//Pega os anúncios em destaque
@@ -141,7 +151,7 @@ var ipara = {};
 		var userid = ipara.getUserId();
 		userid.success(function(data) {
 			$.ajax({
-				url : "http://www.ipara.com.br/iparaServices/veiculos/page/pagesize/1/" + conf.qtdeOfertasRecentes + "/" + data.UserId + "?format=json",
+				url : "http://redepara.cloudapp.net:82/produtos/"+conf.email+"/1/"+conf.qtdeOfertasRecentes+"?format=json",
 				crossDomain : true,
 				async : false,
 				dataType : 'jsonp',
@@ -166,9 +176,7 @@ var ipara = {};
 		var html = '<h3></h3><hr/><div class="pagination"><ul class="paginator"></ul></div><div class="row"></div><div class="pagination"><ul class="paginator"></ul></div>';
 		$(".iparaListar").html('').append(html);
 
-		var userid = ipara.getUserId();
-		userid.success(function(data) {
-			var totalAnuncios = ipara.getTotalAnuncios(data.UserId);
+		var totalAnuncios = ipara.getTotalAnuncios();
 			totalAnuncios.success(function(total) {
 				//Informar o usuário quantas ofertas encontradas
 				$(".iparaListar h3").html(total + " ofertas encontradas");
@@ -182,8 +190,13 @@ var ipara = {};
 					page : 1, // página inicial
 					onSelect : function(page) {
 						var pagina = (this.slice[0] / conf.anunciosPorPagina) + 1;
+						//Url do serviço
+						if (sessionStorage["categoria"] != 0)
+							url = "http://redepara.cloudapp.net:82/produtos/"+conf.email+"/"+sessionStorage["categoria"]+"/"+pagina+"/"+conf.anunciosPorPagina+"?format=json";
+						else
+							url = "http://redepara.cloudapp.net:82/produtos/"+conf.email+"/"+pagina+"/"+conf.anunciosPorPagina+"?format=json";
 						$.ajax({
-							url : "http://www.ipara.com.br/iparaServices/veiculos/anomodelo/pagesize/" + pagina + "/" + conf.anunciosPorPagina + "/" + sessionStorage['anoIni'] + "/" + sessionStorage['anoFim'] + "/" + sessionStorage['subcategoria'] + "/" + sessionStorage['marca'] + "/" + sessionStorage['modelo'] + "/" + sessionStorage['localidade'] + "/" + sessionStorage['bairro'] + "/" + sessionStorage['vecor'] + "/" + data.UserId + "?format=json",
+							url : url,
 							crossDomain : true,
 							async : false,
 							dataType : 'jsonp',
@@ -213,170 +226,55 @@ var ipara = {};
 				});
 
 			});
-		});
 
 	};
 
 	//Carrega filtros
 	ipara.carregaFiltros = function() {
-		//Limpa div de filtro caso tenha algo e carrega tmpl base
-		var html = '<div class="btn-toolbar"></div>';
-		$(".filtroListar").append(html);
-
-		var userid = ipara.getUserId();
-		userid.success(function(data) {
-
-			//Adiciona comportamento ao selecionar uma opção de fitro
-			$("ul.dropdown-menu li a").live("click", function() {
+		//Filtro de categorias
+		$.ajax({
+			url : "http://redepara.cloudapp.net:82/produtos/filtro/"+conf.email+"?format=json",
+			crossDomain : true,
+			async : false,
+			dataType : 'jsonp',
+			beforeSend : function() {
+				$(".filtroListar").html("");
+				var html = "<div class='btn-toolbar'><div class='btn-group' id='dropSubcategoria'><button class='btn btn-large dropdown-toggle' data-toggle='dropdown'><span class='drop-label'>Tipo</span> <span class='caret'></span></button><ul class='dropdown-menu'></ul></div></div>"
+				$(".filtroListar").append(html);
+			},
+			success : function(filtros) {
+				for (var i = 0, j = filtros.length; i < j; i++) {
+					filtros[i].id = filtros[i].valor;
+					filtros[i].label = filtros[i].rotulo;
+					filtros[i].group = filtros[i].chave;
+					$('#dropdownItemTmpl').tmpl(filtros[i]).appendTo(".filtroListar .btn-toolbar #dropSubcategoria ul");
+				}
+				
+				//Botão de filtrar
+				$('<div class="btn-group"><button type="button" class="btn btn-primary btn-large btnFiltrar">Filtrar</button></div>').appendTo(".filtroListar .btn-toolbar");
+				$(".btnFiltrar").live("click", function() {
+					if ($(this).parent().parent().parent().hasClass("post")) {
+						location.href = "listar.html";
+					}
+					ipara.carregaListar();
+				});
+				
+				//Adiciona comportamento ao selecionar uma opção de filtro
+				$("ul.dropdown-menu li a").live("click", function() {
 				sessionStorage["manterFiltro"] = true;
 				$(this).parent().parent().parent().find("button span.drop-label").html($(this).html());
 				sessionStorage[$(this).data("group").toString()] = $(this).data("id");
-				if ($(this).data("group") === "localidade") {
-					var id = $(this).data("id");
-					//Filtro de bairro
-					$.ajax({
-						url : "http://www.ipara.com.br/iparaservices/veiculosfiltro/" + sessionStorage["subcategoria"] + "/" + sessionStorage["marca"] + "/" + sessionStorage["modelo"] + "/" + sessionStorage["localidade"] + "/" + sessionStorage["bairro"] + "/" + sessionStorage["vecor"] + "/bairro/" + data.UserId + "?format=json",
-						crossDomain : true,
-						async : false,
-						dataType : 'jsonp',
-						beforeSend : function() {
-							//Limpa o dropdown
-							$(".filtroListar .btn-toolbar #dropBairro ul").html("");
-						},
-						success : function(filtros) {
-							for (var i = 0, j = filtros.length; i < j; i++) {
-								filtros[i].id = filtros[i].id_bairro;
-								filtros[i].label = filtros[i].bairro;
-								$('#dropdownItemTmpl').tmpl(filtros[i]).appendTo(".filtroListar .btn-toolbar #dropBairro ul");
-							}
-						}
-					});
-				}
-
-				if ($(this).data("group") === "subcategoria") {
-					//Filtro de marca
-					$.ajax({
-						url : "http://www.ipara.com.br/iparaservices/veiculosfiltro/" + sessionStorage['subcategoria'] + "/0/0/0/0/0/marca/" + data.UserId + "?format=json",
-						crossDomain : true,
-						async : false,
-						dataType : 'jsonp',
-						beforeSend : function() {
-							//Limpa o dropdown
-							$(".filtroListar .btn-toolbar #dropMarca ul").html("");
-						},
-						success : function(filtros) {
-							for (var i = 0, j = filtros.length; i < j; i++) {
-								filtros[i].id = filtros[i].id_categoria_marca;
-								filtros[i].label = filtros[i].marca;
-								$('#dropdownItemTmpl').tmpl(filtros[i]).appendTo(".filtroListar .btn-toolbar #dropMarca ul");
-							}
-						}
-					});
-				}
-
-				if ($(this).data("group") === "marca") {
-					//Filtro de marca
-					$.ajax({
-						url : "http://www.ipara.com.br/iparaservices/veiculosfiltro/" + sessionStorage['subcategoria'] + "/" + sessionStorage['marca'] + "/0/0/0/0/modelo/" + data.UserId + "?format=json",
-						crossDomain : true,
-						async : false,
-						dataType : 'jsonp',
-						beforeSend : function() {
-							//Limpa o dropdown
-							$(".filtroListar .btn-toolbar #dropModelo ul").html("");
-						},
-						success : function(filtros) {
-							for (var i = 0, j = filtros.length; i < j; i++) {
-								filtros[i].id = filtros[i].id_modelo;
-								filtros[i].label = filtros[i].modelo;
-								$('#dropdownItemTmpl').tmpl(filtros[i]).appendTo(".filtroListar .btn-toolbar #dropModelo ul");
-							}
-						}
-					});
-				}
-			});
-
-			//Filtro de subcategoria
-			$.ajax({
-				url : "http://www.ipara.com.br/iparaservices/veiculosfiltro/0/0/0/0/0/0/subcategoria/" + data.UserId + "?format=json",
-				crossDomain : true,
-				async : false,
-				dataType : 'jsonp',
-				beforeSend : function() {
-					//Carrega o html base do dropdown
-					$("#dropdownBaseTmpl").tmpl({
-						label : "Tipo",
-						id : "dropSubcategoria"
-					}).appendTo(".filtroListar .btn-toolbar");
-				},
-				success : function(filtros) {
-					for (var i = 0, j = filtros.length; i < j; i++) {
-						filtros[i].id = filtros[i].id_subcategoria;
-						filtros[i].label = filtros[i].subcategoria;
-						$('#dropdownItemTmpl').tmpl(filtros[i]).appendTo(".filtroListar .btn-toolbar #dropSubcategoria ul");
-					}
-				}
-			});
-
-			//Base do filtro de marca
-			$("#dropdownBaseTmpl").tmpl({
-				label : "Marca",
-				id : "dropMarca"
-			}).appendTo(".filtroListar .btn-toolbar");
-
-			//Base do filtro de modelo
-			$("#dropdownBaseTmpl").tmpl({
-				label : "Modelo",
-				id : "dropModelo"
-			}).appendTo(".filtroListar .btn-toolbar");
-
-			//Filtros de Ano
-			filtroAnoInicial();
-			filtroAnoFinal();
-
-			//Filtro de Localidade
-			$.ajax({
-				url : "http://www.ipara.com.br/iparaservices/veiculosfiltro/" + sessionStorage["subcategoria"] + "/" + sessionStorage["marca"] + "/" + sessionStorage["modelo"] + "/" + sessionStorage["localidade"] + "/" + sessionStorage["bairro"] + "/" + sessionStorage["vecor"] + "/localidade/" + data.UserId + "?format=json",
-				crossDomain : true,
-				async : false,
-				dataType : 'jsonp',
-				beforeSend : function() {
-					//Carrega o html base do dropdown
-					$("#dropdownBaseTmpl").tmpl({
-						label : "Cidade",
-						id : "dropLocalidade"
-					}).appendTo(".filtroListar .btn-toolbar");
-				},
-				success : function(filtros) {
-					for (var i = 0, j = filtros.length; i < j; i++) {
-						filtros[i].id = filtros[i].id_localidade;
-						filtros[i].label = filtros[i].localidade;
-						$('#dropdownItemTmpl').tmpl(filtros[i]).appendTo(".filtroListar .btn-toolbar #dropLocalidade ul");
-					}
-				}
-			});
-
-			//Base do filtro de bairro
-			$("#dropdownBaseTmpl").tmpl({
-				label : "Bairro",
-				id : "dropBairro"
-			}).appendTo(".filtroListar .btn-toolbar");
-
-			//Botão de filtrar
-			$('<div class="btn-group"><button type="button" class="btn btn-primary btn-large btnFiltrar">Filtrar</button></div>').appendTo(".filtroListar .btn-toolbar");
-			$(".btnFiltrar").live("click", function() {
-				if ($(this).parent().parent().parent().hasClass("post")) {
-					location.href = "listar.html";
-				}
-				ipara.carregaListar();
-			});
 		});
+			}
+		});
+
+		
 	};
 
 	//Detalhes de um anúncio
 	ipara.carregaDetalhes = function(idAnuncio) {
 		$.ajax({
-			url : "http://www.ipara.com.br/iparaServices/veiculoanuncio/" + idAnuncio + "?format=json",
+			url : "http://redepara.cloudapp.net:82/produto/" + idAnuncio + "?format=json",
 			crossDomain : true,
 			async : false,
 			dataType : 'jsonp',
@@ -388,37 +286,27 @@ var ipara = {};
 						$("#galeriaDeFotos a:first").click();
 					});
 
-					//Carrega as fotos do anúncio
-					$.ajax({
-						url : "http://www.ipara.com.br/iParaServices/fotos/anuncio/" + idAnuncio + "?format=json",
-						crossDomain : true,
-						async : false,
-						dataType : 'jsonp',
-						beforeSend : function() {
-							var inner = '<div class="carousel-inner"></div><a class="left carousel-control" href="#fotosAnuncio" data-slide="prev">&laquo;</a><a class="right carousel-control" href="#fotosAnuncio" data-slide="next">&raquo;</a>';
-							$('.iparaDetalhes .fotosAnuncio').css("width", $(".iparaDetalhes .fotosAnuncio").data("maxwidth") + "px").html(inner);
+					var inner = '<div class="carousel-inner"></div><a class="left carousel-control" href="#fotosAnuncio" data-slide="prev">&laquo;</a><a class="right carousel-control" href="#fotosAnuncio" data-slide="next">&raquo;</a>';
+					$('.iparaDetalhes .fotosAnuncio').css("width", $(".iparaDetalhes .fotosAnuncio").data("maxwidth") + "px").html(inner);
 
-						},
-						success : function(fotos) {
-							var div = document.createElement("div");
-							div.setAttribute("id", "galeriaDeFotos");
-							$("body").append(div);
-							for (var i = 0, j = fotos.length; i < j; i++) {
-								fotos[i].UserId = anuncio.UserId;
-								fotos[i].maxWidth = $(".iparaDetalhes .fotosAnuncio").data("maxwidth");
-								fotos[i].maxHeight = $(".iparaDetalhes .fotosAnuncio").data("maxheight");
-								$('#sliderFotosTmpl').tmpl(fotos[i]).appendTo(".iparaDetalhes .fotosAnuncio .carousel-inner");
-								$('#galeriaFotosItemTmpl').tmpl(fotos[i]).appendTo("#galeriaDeFotos");
-							}
-							$(".iparaDetalhes .fotosAnuncio .carousel-inner .item:first").addClass("active");
-						}
-					});
+					var div = document.createElement("div");
+					div.setAttribute("id", "galeriaDeFotos");
+					$("body").append(div);
+					for (var i = 0, j = anuncio.imagens.length; i < j; i++) {
+						anuncio.imagens[i].path = anuncio.imagens[i].url;
+						anuncio.imagens[i].maxWidth = $(".iparaDetalhes .fotosAnuncio").data("maxwidth");
+						anuncio.imagens[i].maxHeight = $(".iparaDetalhes .fotosAnuncio").data("maxheight");
+						$('#sliderFotosTmpl').tmpl(anuncio.imagens[i]).appendTo(".iparaDetalhes .fotosAnuncio .carousel-inner");
+						$('#galeriaFotosItemTmpl').tmpl(anuncio.imagens[i]).appendTo("#galeriaDeFotos");
+					}
+					$(".iparaDetalhes .fotosAnuncio .carousel-inner .item:first").addClass("active"); 
+
 				}
 
 				//Carrega contatos
 				if ($(".iparaDetalhes .contatos").length > 0) {
 					$(".iparaDetalhes .contatos").html($('#contatosTmpl').tmpl({
-						titulo : "Plantão de Vendas",
+						titulo : "Fale Conosco",
 						fone : conf.fonePrincipal,
 						twitter : conf.twitter,
 						facebook : conf.facebook,
@@ -433,176 +321,25 @@ var ipara = {};
 					anuncio.descricao = $('<span />', {
 						html : anuncio.descricao
 					}).text();
-
-					//Carrega os opcionais do veículo
-					$.ajax({
-						url : "http://www.ipara.com.br/iparaServices/veiculoanuncio/" + idAnuncio + "/true?format=json",
-						crossDomain : true,
-						async : false,
-						dataType : 'jsonp',
-						success : function(opcionais) {
-							if (opcionais.length > 0) {
-								anuncio.opcionais = "";
-								for (var i = 0, j = opcionais.length; i < j; i++) {
-									anuncio.opcionais += "<li>" + opcionais[i].item + "</li>";
-								}
-							} else {
-								console.log("nao tem opcionais");
-								anuncio.opcionais = "Não informado.";
-							}
-							anuncio.valor = anuncio.valor === "0,00" ? "" : "R$" + anuncio.valor;
-							$('#infoAnuncioTmpl').tmpl(anuncio).appendTo(".iparaDetalhes .infoAnuncio");
-
-							//Pega o endereço e carrega o mapa
-							if ($("#mapa").length > 0) {
-								$.ajax({
-									url : "http://www.ipara.com.br/iParaServices/endereco/" + anuncio.id_endereco + "?format=json",
-									crossDomain : true,
-									cache : true,
-									dataType : 'jsonp',
-									success : function(endereco) {
-
-										//carrga o mapa
-										$("#mapa span").goMap({
-											maptype : 'ROADMAP',
-											zoom : 15,
-											markers : [{
-												latitude : endereco.latitude,
-												longitude : endereco.longitude,
-												id : 'marcador',
-												draggable : false,
-												html : {
-													content : anuncio.titulo + '<br/>' + endereco.logradouro + ", " + endereco.numero + "<br/>" + endereco.bairro + " - " + endereco.local,
-													popup : true
-												}
-											}],
-											disableDoubleClickZoom : true
-										});
-
-									}
-								});
-							}
+					
+					//Formata preço
+					for (var j = 0; j < anuncio.composicao.length; j++) {
+						if (anuncio.composicao[j] !== undefined && anuncio.composicao[j].valor !== undefined) {
+							
+							anuncio.valor = anuncio.composicao[j].valor === 0 ? "Preço à combinar." : "R$"+float2moeda(anuncio.composicao[j].valor);
 						}
-					});
-
+					}
+					$('#infoAnuncioTmpl').tmpl(anuncio).appendTo(".iparaDetalhes .infoAnuncio");
 				}
+				
 
 			}
 		});
 	};
 
-	ipara.carregaAgendamento = function() {
-		var userid = ipara.getUserId();
-		userid.success(function(user) {
-			//Busca os serviços que o usuário tem acesso
-			$.ajax({
-				url : "http://www.ipara.com.br/iparaServices/servicos/" + user.UserId + "?format=json",
-				crossDomain : true,
-				async : false,
-				dataType : 'jsonp',
-				success : function(servicos) {
-					for (var i = 0, j = servicos.length; i < j; i++) {
-						if (servicos[i].id_servico === "2" && servicos[i].status === "True") {
-							//Carrega imóveis para o cliente selecionar
-							var totalUsuario = ipara.getTotalAnuncios(user.UserId);
-							totalUsuario.success(function(total) {
-								$.ajax({
-									url : "http://www.ipara.com.br/iparaServices/veiculos/page/pagesize/1/" + total + "/" + user.UserId + "?format=json",
-									crossDomain : true,
-									async : false,
-									dataType : 'jsonp',
-									beforeSend : function() {
-										$('#formAgendaTmpl').tmpl({}).appendTo(".agendaVisita #formAgenda");
-									},
-									success : function(anuncios) {
-										//Plugin de data
-										$('.datepicker').datepicker({
-											format : 'dd/mm/yyyy'
-										});
-										for (var i = 0, j = anuncios.length; i < j; i++) {
-											$("#id_anuncio").append('<option value="' + anuncios[i].id_anuncio + '">' + anuncios[i].titulo + ' - ' + anuncios[i].local + '/PA</option>');
-										}
-									},
-									complete : function() {
-										//Aplica o filterbytext
-										$("#id_anuncio").filterByText("#inputBusca", false);
-									}
-								});
-							});
-							//Validação do formulário
-							$('#formAgenda').validate({
-								rules : {
-									email : {
-										required : true,
-										email : true
-									},
-									nome : {
-										required : true
-									},
-									data_in : {
-										required : true
-									}
-								},
-								messages : {
-									email : {
-										required : "Por favor insira seu email para entrarmos em contato.",
-										email : "Insira um email válido."
-									},
-									nome : {
-										required : "Por favor insira seu nome."
-									},
-									data_in : {
-										required : "Escolha a data que você deseja fazer a visita."
-									}
-								},
-								highlight : function(label) {
-									$(label).closest('.control-group').addClass('error');
-								},
-								success : function(label) {
-									label.text('OK!').addClass('valid').closest('.control-group').addClass('success');
-								}
-							});
-							//Submit do form
-							$("#formAgenda").live('submit', function() {
-								$("#status").val("false");
-								$("#userId").val(user.UserId);
-								$("#data_fim").val($("#data_in").val());
-								$("#data_update").val(dataAtual());
-								$("#descricao").val($("#nome").val() + " - " + $("#email").val() + " - " + $("#telefone").val() + " [Preferência de Horário: " + $("#horario").val() + "]");
-								$("#titulo").val($("#id_anuncio option:selected").html());
-								var data = $('#formAgenda').serializeObject();
-								$.ajax({
-									url : "http://ipara.com.br/iParaServices/agendavisita?format=json",
-									crossDomain : true,
-									async : false,
-									dataType : 'jsonp',
-									data : data,
-									success : function(agenda) {
-										console.log(agenda === true);
-										console.log(agenda);
-										if (agenda === true) {
-											$("#formAgenda").hide("slow");
-											$("#formAgenda").parent().append("<h4>Visita agendada com sucesso. Aguarde que entraremos em contato com você.</h4>")
-										}
-									}
-								});
-								return false;
-							});
-
-						}
-					}
-				}
-			});
-		});
-	};
 
 })();
 
-//Caso esteja na pagina agendarVisita.html
-//verificar se o usuario tem acesso ao serviço
-if ($(".agendaVisita").length > 0) {
-	ipara.carregaAgendamento();
-}
 
 //Chamadas para as funções definidas no namespace ipara
 //Carregar Carousel se houver
@@ -745,44 +482,25 @@ $.fn.serializeObject = function() {
 	return o;
 };
 
-//Função de filtros de ano
-function filtroAnoInicial() {
-	var anoAtual = new Date().getFullYear() + 1;
-	var anos = [];
-	for (var i = anoAtual, j = 1930; i >= j; i--) {
-		var ano = {
-			id : i,
-			group : "anoIni",
-			label : i
-		};
-		anos.push(ano);
-	}
-	$(".filtroListar .btn-toolbar").append($("#dropdownBaseTmpl").tmpl({
-		label : "Ano de",
-		id : "dropAnoIni"
-	}));
-	for (var i = 0, j = anos.length; i < j; i++)
-		$(".filtroListar .btn-toolbar #dropAnoIni ul").append($('#dropdownItemTmpl').tmpl(anos[i]));
+//Convert float para formato de dinheiro
+function float2moeda(num) {
 
-}
+    x = 0;
 
-//Função de filtros de ano
-function filtroAnoFinal() {
-	var anoAtual = new Date().getFullYear() + 1;
-	var anos = [];
-	for (var i = anoAtual, j = 1930; i >= j; i--) {
-		var ano = {
-			id : i,
-			group : "anoFim",
-			label : i
-		};
-		anos.push(ano);
-	}
-	$(".filtroListar .btn-toolbar").append($("#dropdownBaseTmpl").tmpl({
-		label : "Até",
-		id : "dropAnoFim"
-	}));
-	for (var i = 0, j = anos.length; i < j; i++)
-		$(".filtroListar .btn-toolbar #dropAnoFim ul").append($('#dropdownItemTmpl').tmpl(anos[i]));
+    if (num < 0) {
+        num = Math.abs(num);
+        x = 1;
+    }
+    if (isNaN(num)) num = "0";
+    cents = Math.floor((num * 100 + 0.5) % 100);
+
+    num = Math.floor((num * 100 + 0.5) / 100).toString();
+
+    if (cents < 10) cents = "0" + cents;
+    for (var i = 0; i < Math.floor((num.length - (1 + i)) / 3); i++)
+        num = num.substring(0, num.length - (4 * i + 3)) + '.'
+               + num.substring(num.length - (4 * i + 3));
+    ret = num + ',' + cents;
+    if (x == 1) ret = ' - ' + ret; return ret;
 
 }

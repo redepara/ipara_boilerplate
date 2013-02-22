@@ -1,7 +1,7 @@
 <!-- Destaques template -->
 <script id="destaquesCarouselItemTmpl" type="x-jquery-tmpl">
 	<div class="item">
-	<a href="detalhes.html?id=${id_anuncio}">
+	<a href="detalhes.html?id=${id}">
 	<img width="770px" height="502px" src="http://www.ipara.com.br/ipara/Media/createThumbnail?path=${imagens[0].url}&maxWidth=770&maxheight=770&extension=png" alt="" />
 	<div class="carousel-caption">
 	<h4>${titulo}</h4>
@@ -14,11 +14,11 @@
 <script id="recentesItemTmpl" type="x-jquery-tmpl">
 	<li class="span2">
 	<div class="thumbnail">
-	<img height="120px" src="http://www.ipara.com.br/ipara/Media/createThumbnail?path=http://www.ipara.com.br/users/${UserId}/fotos/${foto}&maxWidth=160&maxheight=120&extension=png" />
+	<img height="120px" src="http://www.ipara.com.br/ipara/Media/createThumbnail?path=${imagens[0].url}&maxWidth=160&maxheight=120&extension=png" />
 	<div class="caption">
 	<h6>${titulo}</h6>
 	<p>
-	<a href="detalhes.html?id=${id_anuncio}" class="btn btn-primary">Detalhes</a>
+	<a href="detalhes.html?id=${id}" class="btn btn-primary">Detalhes</a>
 	</p>
 	</div>
 	</div>
@@ -28,43 +28,34 @@
 <script id="listarItemTmpl" type="x-jquery-tmpl">
 	<div class="span10 media">
 	<h4 class="media-heading">${titulo}</h4>
-	<a class="pull-left" href="#"> <img src="http://www.ipara.com.br/ipara/Media/createThumbnail?path=http://www.ipara.com.br/users/${UserId}/fotos/${foto}&maxWidth=135&maxheight=135&extension=png" class="img-polaroid media-object" /> </a>
+	<a class="pull-left" href="#"> <img src="http://www.ipara.com.br/ipara/Media/createThumbnail?path=${imagens[0].url}&maxWidth=135&maxheight=135&extension=png" class="img-polaroid media-object" /> </a>
 	<div class="media-body">
 	<p>
 	${descricao}
 	</p>
 	<p>
 	<br/>
-	<a class="btn offset5" href="detalhes.html?id=${id_anuncio}">Ver detalhes &raquo;</a>
+	<a class="btn offset5" href="detalhes.html?id=${id}">Ver detalhes &raquo;</a>
 	</p>
 	</div>
-	</div>
-</script>
-<!-- Dropdown base -->
-<script id="dropdownBaseTmpl" type="x-jquery-tmpl">
-	<div class="btn-group" id="${id}">
-	<button class="btn btn-large dropdown-toggle" data-toggle="dropdown">
-	<span class="drop-label">${label}</span> <span class="caret"></span>
-	</button>
-	<ul class="dropdown-menu"></ul>
 	</div>
 </script>
 <!-- Dropdown itens -->
 <script id="dropdownItemTmpl" type="x-jquery-tmpl">
 	<li>
-	<a data-group="${group}" data-id="${id}" href="#filtro">${label}</a>
+	<a data-group="${group}" data-id="${id}" href="#filtro">${label} (${contador})</a>
 	</li>
 	</ul>
 </script>
 <!-- Slider de Fotos do Anúncio-->
 <script id="sliderFotosTmpl" type="x-jquery-tmpl">
 	<div class="item">
-	<img src="http://www.ipara.com.br/ipara/Media/createThumbnail?path=http://www.ipara.com.br/users/${UserId}/fotos/${midia}&maxWidth=${maxWidth}&maxheight=${maxHeight}&extension=png" alt="">
+	<img src="http://www.ipara.com.br/ipara/Media/createThumbnail?path=${path}&maxWidth=${maxWidth}&maxheight=${maxHeight}&extension=png" alt="">
 	</div>
 </script>
 <!-- Galeria de Fotos do Anúncio -->
 <script id="galeriaFotosItemTmpl" type="x-jquery-tmpl">
-	<a class="fotosGaleria" href="http://www.ipara.com.br/users/${UserId}/fotos/${midia}" rel="prettyPhoto[pp_gal]" title="Imagens do Anúncio"></a>
+	<a class="fotosGaleria" href="${path}" rel="prettyPhoto[pp_gal]" title="Imagens do Anúncio"></a>
 </script>
 <!-- Contatos -->
 <script id="contatosTmpl" type="x-jquery-tmpl">
@@ -84,76 +75,11 @@
 </script>
 <!-- Informações de Anúncio -->
 <script id="infoAnuncioTmpl" type="x-jquery-tmpl">
-	<h4>${local} - PA</h4>
+	<h4>${categoria.nome}</h4>
 	<hr/>
 	<h3>${titulo}</h3>
 	<small class="btn-danger">${valor}</small>
 	<p>{{html descricao}}</p>
-	<h4>Detalhes e Opcionais</h4>
-	<p>{{html opcionais}}</p>
-	<div id="mapa"><span></span></div>
-</script>
-<!-- Formulário de Agendamento de Visistas -->
-<script id="formAgendaTmpl" type="x-jquery-tmpl">
-	<div class="span6 form-horizontal">
-	<div class="control-group">
-	<label class="control-label" for="nome">Nome</label>
-	<div class="controls">
-	<input class="span3" type="text" id="nome" name="nome" placeholder="Digite seu nome">
-	</div>
-	</div>
-	<div class="control-group">
-	<label class="control-label" for="email">Email</label>
-	<div class="controls">
-	<input class="span3" type="text" id="email" name="email" placeholder="Digite email válido">
-	</div>
-	</div>
-	<div class="control-group">
-	<label class="control-label" for="telefone">Telefone</label>
-	<div class="controls">
-	<input class="span3" type="text" id="telefone" name="telefone" placeholder="Digite um telefone p/contato">
-	</div>
-	</div>
-	<div class="control-group">
-	<label class="control-label" for="data">Data</label>
-	<div class="controls date" data-date-format="dd/mm/yyyy">
-	<input class="span2 datepicker uneditable-input" type="text" id="data_in" name="data_in" placeholder="Data desejada p/visita">
-	</div>
-	</div>
-	<div class="control-group">
-	<label class="control-label" for="horario">Melhor horário</label>
-	<div class="controls">
-	<label class="radio inline"><input type="radio" id="horario" name="horario" value="manhã">Manhã</label>
-	<label class="radio inline"><input type="radio" id="horario" name="horario" value="tarde">Tarde</label>
-	</div>
-	</div>
-	</div>
-	<div class="span6">
-	<div class="control-group">
-	<div class="controls">
-	<input class="span5" type="text" id="inputBusca" placeholder="buscar imóvel">
-	</div>
-	</div>
-	<div class="control-group">
-	<div class="controls">
-	<select class="span5"  id="id_anuncio" multiple="multiple" name="id_anuncio" size="12">
-	</select>
-	</div>
-	</div>
-	<div class="control-group">
-	<div class="controls">
-	<button type="submit" class="btn">
-	Solicitar Agendamento
-	</button>
-	</div>
-	</div>
-	</div>
-	<input type="hidden" id="status" name="status" />
-	<input type="hidden" id="userId" name="userId" />
-	<input type="hidden" id="titulo" name="titulo" />
-	<input type="hidden" id="descricao" name="descricao" />
-	<input type="hidden" id="data_update" name="data_update" />
-	<input type="hidden" id="data_fim" name="data_fim" />
 </script>
 <!-- Carrega API do GooglePlus -->
 <script src="https://apis.google.com/js/plusone.js?v=1.0"></script>
